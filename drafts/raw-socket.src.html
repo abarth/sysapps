@@ -307,12 +307,14 @@ function MUST run the following steps:
       <dt>Otherwise, if <var>type</var> is <code>udp</code>,
       <dd>let <var>socket</var> be a UDP socket.
       <dt>Otherwise,
-      <dd>schedule a task to call <var>callback</var> with a <code>CreateInfo</code>
-      dictionary with <code>socketId</code> set to 0 and abort these steps.
+      <dd><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to invoke
+        <var>callback</var> with a <code>CreateInfo</code> dictionary with <code>socketId</code> equal
+        to 0 and abort these steps.
     </dl>
   <li>Assign a unique identifier <var>id</var> to <var>socket</var>.
-  <li>Schedule a task to call <var>callback</var> with a <code>CreateInfo</code>
-    dictionary with <code>socketId</code> set to <var>id</var>.
+  <li><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to invoke
+    <var>callback</var> with a <code>CreateInfo</code> dictionary with <code>socketId</code> equal
+    to <var>id</var>.
 </ol>
 
 <p>The <dfn title=socket-Socket-destroy><code>destroy(<var>socketId</code>)</code></dfn>
@@ -326,8 +328,9 @@ function MUST run the following steps:
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>Let <var>address</var> be the result of resolving <var>hostname</var> via DNS.
-  <li>Connect <var>socket<var> to <var>address</var> on port <var>port</var>.
-  <li>Schedule a task to call <var>callback</var> with <code>result</code> ???.
+  <li>Connect <var>socket</var> to <var>address</var> on port <var>port</var>.
+  <li><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to invoke
+    <var>callback</var> with <code>result</code> equal to ???.
 </ol>
 
 <p>The <dfn title=socket-Socket-bind><code>bind(<var>socketId</var>, <var>address</var>, <var>port</var>, <var>callback</var>)</code></dfn>
@@ -336,13 +339,15 @@ function MUST run the following steps:
   <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
-  <li>If <var>socket</var> is not a UDP socket, schedule a task to call
+  <li>If <var>socket</var> is not a UDP socket,
+    <span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to invoke
     <var>callback</var> with <code>result</code> ??? and abort these steps.
   <li>If <var>address</var> is not an address of the local machine,
-    schedule a task to call <var>callback</var> with a <code>result</code> ???
-    and abort these steps.
+    <span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to invoke
+    <var>callback</var> with a <code>result</code> ??? and abort these steps.
   <li>Attempt to bind a UDP socket to <var>address</var> on port <var>port</var>.
-  <li>Schedule a task to call <var>callback</var> with <code>result</code> ???.
+  <li><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to invoke
+    <var>callback</var> with <code>result</code> ???.
 </ol>
 
 <p>The <dfn title=socket-Socket-disconnect><code>disconnect(<var>socketId</var>)</code></dfn>
@@ -366,9 +371,9 @@ function MUST run the following steps:
     (if <var>bufferSize</var> was specified).
   <li>Read <var>size</var> octets from <var>socket</var> and store the result in
     <var>incoming</var>.
-  <li>Schedule a task to call <var>callback</var> with a <code>ReadInfo</code>
-    dictionary with <code>data</code> containing <var>incoming</var> and
-    <code>resultCode</code> ???.
+  <li><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to invoke
+    <var>callback</var> with a <code>ReadInfo</code> dictionary with <code>data</code> containing
+    <var>incoming</var> and <code>resultCode</code> equal to ???.
 </ol>
 
 <p>The <dfn title=socket-Socket-write><code>write(<var>socketId</var>, <var>data</var>, <var>callback</var>)</code></dfn>
@@ -382,20 +387,21 @@ function MUST run the following steps:
   <li>
     <dl>
       <dt>If the write operation completes without blocking:
-      <dd>Schedule a task to call <var>callback</var> with a <code>WriteInfo</code>
-        dictionary with <code>bytesWritten</code> equal to the number of octets
-        successfully written into the <var>socket</var>.
+      <dd><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to invoke
+        <var>callback</var> with a <code>WriteInfo</code> dictionary with <code>bytesWritten</code>
+        equal to the number of octets successfully written into the <var>socket</var>.
       <dt>If the write operation blocked before completing:
       <dd>
         <ol>
-          <li>Schedule a task to call <var>callback</var> with a <code>WriteInfo</code>
-            dictionary with <code>bytesWritten</code> equal to the number of
-            octets successfully written into the <var>socket</var>.
+          <li><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to invoke
+            <var>callback</var> with a <code>WriteInfo</code> dictionary with <code>bytesWritten</code>
+            equal to the number of octets successfully written into the <var>socket</var>.
           <li>Spin the event loop until the write operation completes.
-          <li>Schedule a task to fire a ??? event on ???.
+          <li><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to fire
+            a ??? event on ???.
         </ol>
       <dt>If an error occurs:
-      <dd>Schedule a task to ???
+      <dd><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to ???
     </dl>
 </ol>
 
@@ -410,8 +416,8 @@ function MUST run the following steps:
     (if <var>bufferSize</var> was specified).
   <li>Read <var>size</var> octets from <var>socket</var> and store the result in
     <var>incoming</var>.
-  <li>Schedule a task to call <var>callback</var> with a <code>RecvFromInfo</code>
-    dictionary with:
+  <li><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to invoke
+    <var>callback</var> with a <code>RecvFromInfo</code> dictionary with:
     <ul>
       <li><code>resultCode</code> equal to ???
       <li><code>data</code> containing <var>incoming</var>.
@@ -433,20 +439,21 @@ function must run the following steps:
   <li>
     <dl>
       <dt>If the write operation completes without blocking:
-      <dd>Schedule a task to call <var>callback</var> with a <code>WriteInfo</code>
-        dictionary with <code>bytesWritten</code> equal to the number of octets
-        successfully written into the <var>socket</var>.
+      <dd><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to invoke
+        <var>callback</var> with a <code>WriteInfo</code> dictionary with <code>bytesWritten</code>
+        equal to the number of octets successfully written into the <var>socket</var>.
       <dt>If the write operation blocked before completing:
       <dd>
         <ol>
-          <li>Schedule a task to call <var>callback</var> with a <code>WriteInfo</code>
-            dictionary with <code>bytesWritten</code> equal to the number of
-            octets successfully written into the <var>socket</var>.
+          <li><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to invoke
+            <var>callback</var> with a <code>WriteInfo</code> dictionary with <code>bytesWritten</code>
+            equal to the number of octets successfully written into the <var>socket</var>.
           <li>Spin the event loop until the write operation completes.
-          <li>Schedule a task to fire a ??? event on ???.
+          <li><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to fire
+            a ??? event on ???.
         </ol>
       <dt>If an error occurs:
-      <dd>Schedule a task to ???
+      <dd><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to ???
     </dl>
 </ol>
 
@@ -458,8 +465,8 @@ function MUST run the following steps:
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>Set the <var>keep alive</var> flag on <var>socket</var> to <var>enable</var>.
   <li>Set the <var>probe delay</var> value on <var>socket</var> to <var>delay</var> if <var>delay</var> was specified and 0 otherwise.
-  <li>Schedule a task to call <var>callback</var> with <code>result</code>
-    equal to ???
+  <li><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to invoke
+    <var>callback</var> with <code>result</code> equal to ???
   <li>FIXME: Do we need to spec the keepalive loop or can we refer to another spec for that?
 </ol>
 
@@ -476,8 +483,8 @@ function MUST run the following steps:
       <dt>Otherwise,
       <dd>enable the Nagle algorithm.
     </dl>
-  <li>Schedule a task to call <var>callback</var> with <code>result</code>
-    equal to ???
+  <li><span data-anolis-spec=html>Queue</span> a <span data-anolis-spec=html>task</span> to invoke
+    <var>callback</var> with <code>result</code> equal to ???
 </ol>
 
 <h2 class=no-num>References</h2>
