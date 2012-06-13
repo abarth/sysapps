@@ -1,0 +1,30 @@
+{
+  "definitions": {
+    "bindcallback": "bindcallback",
+    "connectcallback": "connectcallback",
+    "createcallback": "createcallback",
+    "createinfo": "createinfo",
+    "createoptions": "createoptions",
+    "readcallback": "readcallback",
+    "readinfo": "readinfo",
+    "recvfromcallback": "recvfromcallback",
+    "recvfrominfo": "recvfrominfo",
+    "sendtocallback": "sendtocallback",
+    "setkeepalivecallback": "setkeepalivecallback",
+    "setnodelaycallback": "setnodelaycallback",
+    "socket-socket-bind": "socket-socket-bind",
+    "socket-socket-connect": "socket-socket-connect",
+    "socket-socket-create": "socket-socket-create",
+    "socket-socket-destroy": "socket-socket-destroy",
+    "socket-socket-disconnect": "socket-socket-disconnect",
+    "socket-socket-read": "socket-socket-read",
+    "socket-socket-recvfrom": "socket-socket-recvfrom",
+    "socket-socket-sendto": "socket-socket-sendto",
+    "socket-socket-setkeepalive": "socket-socket-setkeepalive",
+    "socket-socket-setnodelay": "socket-socket-setnodelay",
+    "socket-socket-write": "socket-socket-write",
+    "sockettype": "sockettype",
+    "writecallback": "writecallback",
+    "writeinfo": "writeinfo"
+  }
+}
