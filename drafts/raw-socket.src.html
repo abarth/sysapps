@@ -453,16 +453,21 @@ function MUST run the following steps:
   <li>FIXME: Do we need to spec the keepalive loop or can we refer to another spec for that?
 </ol>
 
-<p>The <dfn title=socket-Socket-setNoDelay><code>setNoDelay</code></dfn> function
-enable/disable Nagle algorithm.
-<dl>
-  <dt>socketId
-  <dd>The socketId.
-  <dt>noDelay
-  <dd>If true, disable Nagle algorithm.
-  <dt>callback
-  <dd>Called when the setNoDelay attempt is complete.
-</dl>
+<p>The <dfn title=socket-Socket-setNoDelay><code>setNoDelay(<var>socketId</var>, <var>noDelay</var>, <var>callback</var>)</code></dfn>
+function MUST run the following steps:
+<ol>
+  <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
+  <li>FIXME: Do sockets have a state machine that can throw an error here?
+  <li>
+    <dl>
+      <dt>If <var>noDelay</var> is true,
+      <dd>disable the Nagle algorithm for <var>socket</var>. FIXME: Citation needed.
+      <dt>Otherwise,
+      <dd>enable the Nagle algorithm.
+    </dl>
+  <li>Schedule a task to call <var>callback</var> with <code>result</code>
+    equal to ???
+</ol>
 
 <h2 class=no-num>References</h2>
 <div id=anolis-references></div>
