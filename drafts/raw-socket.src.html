@@ -397,8 +397,8 @@ function MUST run the following steps:
             <var>callback</var> with a <code>WriteInfo</code> dictionary with <code>bytesWritten</code>
             equal to the number of octets successfully written into the <var>socket</var>.
           <li>Spin the event loop until the write operation completes.
-          <li><span data-anolis-spec=html>Queue a task</span> to fire
-            a ??? event on ???.
+          <li><span data-anolis-spec=html>Queue a task</span> to
+            <span data-anolis-spec=dom title=concept-event-fire>fire an event</span> named ??? at the ???.
         </ol>
       <dt>If an error occurs:
       <dd><span data-anolis-spec=html>Queue a task</span> to ???
@@ -449,8 +449,8 @@ function must run the following steps:
             <var>callback</var> with a <code>WriteInfo</code> dictionary with <code>bytesWritten</code>
             equal to the number of octets successfully written into the <var>socket</var>.
           <li>Spin the event loop until the write operation completes.
-          <li><span data-anolis-spec=html>Queue a task</span> to fire
-            a ??? event on ???.
+          <li><span data-anolis-spec=html>Queue a task</span> to
+            <span data-anolis-spec=dom title=concept-event-fire>fire an event</span> named ??? at the ???.
         </ol>
       <dt>If an error occurs:
       <dd><span data-anolis-spec=html>Queue a task</span> to ???
