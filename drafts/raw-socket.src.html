@@ -352,15 +352,6 @@ function runs the following steps:
 <ol>
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
-  <li>Wait for one of the following conditions:
-    <ul>
-      <li>The remote host terminates <var>socket</var>.
-      <li>The <var>socket</var> has at least <var>bufferSize</var> bytes
-        available for reading (if <var>bufferSize</var> was specified).
-      <li>The <var>socket</var> has at least one byte available for reading
-        (if <var>bufferSize</var> was not specified).
-      <li>An implementation-defined period of time has elapsed.
-    </ul>
   <li>Let <var>size</var> be the maximum of the number of bytes available for
     reading in <var>socket</var> and <var>bufferSize</var> (if <var>bufferSize</var>
     was specified).
@@ -370,16 +361,6 @@ function runs the following steps:
     dictionary with <code>data</code> containing <var>bytes</var> and
     <code>resultCode</code> ???.
 </ol>
-
-
-<dl>
-  <dt>socketId
-  <dd>The socketId.
-  <dt>bufferSize
-  <dd>The read buffer size.
-  <dt>callback
-  <dd>Delivers data that was available to be read without blocking.
-</dl>
 
 <p>The <dfn title=socket-Socket-write><code>write</code></dfn> function
 writes data on the given socket.
