@@ -293,17 +293,23 @@ interface <dfn>SetNoDelayCallback</dfn> {
   static void <span title=socket-Socket-setNoDelay>setNoDelay</span>(long socketId, boolean noDelay, SetNoDelayCallback callback);
 };</pre>
 
-<p>The <dfn title=socket-Socket-create><code>create</code></dfn> function
-creates a socket of the specified type that will connect to the specified
-remote machine.
-<dl>
-  <dt>type
-  <dd>The type of socket to create. Must be <code>tcp</code> or <code>udp</code>.
-  <dt>options
-  <dd>The socket options.
-  <dt>callback
-  <dd>Called when the socket has been created.
-</dl>
+<p>The <dfn title=socket-Socket-create><code>create(<var>type</var>, <var>options</var>, <var>callback</var>)</code></dfn>
+function runs the following steps:
+<ol>
+  <li>
+    <dl>
+      <dt>If <var>type</var> is <code>tcp</code>,
+      <dd>let <var>socket</var> be a TCP socket.
+      <dt>Otherwise, if <var>type</var> is <code>udp</code>,
+      <dd>let <var>socket</var> be a UDP socket.
+      <dt>Otherwise,
+      <dd>schedule a task to call <var>callback</var> with a <code>CreateInfo</code>
+      dictionary with <code>socketId</code> set to 0.
+    </dl>
+  <li>Assign a unique identifier <var>id</var> to <var>socket</var>.
+  <li>Schedule a task to call <var>callback</var> with a <code>CreateInfo</code>
+  dictionary with <code>socketId</code> set to <var>id</var>.
+</ol>
 
 <p>The <dfn title=socket-Socket-destroy><code>destroy</code></dfn> function
 destroys the socket. Each socket created should be destroyed after use.
