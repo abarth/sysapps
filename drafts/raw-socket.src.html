@@ -297,7 +297,7 @@ interface <dfn>SetNoDelayCallback</dfn> {
 function rather than using member functions on a Socket object?
 
 <p>The <dfn title=socket-Socket-create><code>create(<var>type</var>, <var>options</var>, <var>callback</var>)</code></dfn>
-function MUST run the following steps:
+function MUST run these steps:
 <ol>
   <li>Return, but continue running these steps asynchronously.
   <li>
@@ -322,7 +322,7 @@ function MUST destroy the socket. Each socket created SHOULD be destroyed after 
 FIXME: What happens to sockets in each state of the state machine?
 
 <p>The <dfn title=socket-Socket-connect><code>connect(<var>socketId</var>, <var>hostname</var>, <var>port</var>, <var>callback</var>)</code></dfn>
-function MUST run the following steps:
+function MUST run these steps:
 <ol>
   <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
@@ -334,7 +334,7 @@ function MUST run the following steps:
 </ol>
 
 <p>The <dfn title=socket-Socket-bind><code>bind(<var>socketId</var>, <var>address</var>, <var>port</var>, <var>callback</var>)</code></dfn>
-function MUST run the following steps:
+function MUST run these steps:
 <ol>
   <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
@@ -351,7 +351,7 @@ function MUST run the following steps:
 </ol>
 
 <p>The <dfn title=socket-Socket-disconnect><code>disconnect(<var>socketId</var>)</code></dfn>
-function MUST run the following steps:
+function MUST run these steps:
 <ol>
   <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
@@ -361,7 +361,7 @@ function MUST run the following steps:
 </ol>
 
 <p>The <dfn title=socket-Socket-read><code>read(<var>socketId</var>, <var>bufferSize</var>, <var>callback</var>)</code></dfn>
-function MUST run the following steps:
+function MUST run these steps:
 <ol>
   <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
@@ -377,7 +377,7 @@ function MUST run the following steps:
 </ol>
 
 <p>The <dfn title=socket-Socket-write><code>write(<var>socketId</var>, <var>data</var>, <var>callback</var>)</code></dfn>
-function MUST run the following steps:
+function MUST run these steps:
 <ol>
   <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
@@ -406,7 +406,7 @@ function MUST run the following steps:
 </ol>
 
 <p>The <dfn title=socket-Socket-recvFrom><code>recvFrom(<var>socketId</var>, <var>bufferSize</var>, <var>callback</var>)</code></dfn>
-function MUST run the following steps:
+function MUST run these steps:
 <ol>
   <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
@@ -429,7 +429,7 @@ function MUST run the following steps:
 </ol>
 
 <p>The <dfn title=socket-Socket-sendTo><code>sendTo(<var>socketId</var>, <var>data</var>, <var>address</var>, <var>port</var>, <var>callback</var>)</code></dfn>
-function must run the following steps:
+function must run these steps:
 <ol>
   <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
@@ -458,7 +458,7 @@ function must run the following steps:
 </ol>
 
 <p>The <dfn title=socket-Socket-setKeepAlive><code>setKeepAlive(<var>socketId</var>, <var>enable</var>, <var>delay</var>, <var>callback</var>)</code></dfn>
-function MUST run the following steps:
+function MUST run these steps:
 <ol>
   <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
@@ -471,7 +471,7 @@ function MUST run the following steps:
 </ol>
 
 <p>The <dfn title=socket-Socket-setNoDelay><code>setNoDelay(<var>socketId</var>, <var>noDelay</var>, <var>callback</var>)</code></dfn>
-function MUST run the following steps:
+function MUST run these steps:
 <ol>
   <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
