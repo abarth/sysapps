@@ -346,7 +346,7 @@ function MUST run the following steps:
 function MUST run the following steps:
 <ol>
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
-    <li>FIXME: Do sockets have a state machine that can throw an error here?
+  <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>If <var>socket</var> is not a TCP socket, abort these steps.
   <li>Disconnect <var>socket</var> from the remote host.
 </ol>
@@ -357,8 +357,8 @@ function MUST run the following steps:
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>Let <var>size</var> be the maximum of the number of bytes available for
-    reading in <var>socket</var> and <var>bufferSize</var> (if <var>bufferSize</var>
-    was specified).
+    reading in <var>socket</var> without blocking and <var>bufferSize</var>
+    (if <var>bufferSize</var> was specified).
   <li>Read <var>size</var> octets from <var>socket</var> and store the result in
     <var>incoming</var>.
   <li>Schedule a task to call <var>callback</var> with a <code>ReadInfo</code>
@@ -394,16 +394,27 @@ function MUST run the following steps:
   <li>
 </ol>
 
-<p>The <dfn title=socket-Socket-recvFrom><code>recvFrom</code></dfn> function
-reads data from the given socket.
-<dl>
-  <dt>socketId
-  <dd>The socketId.
-  <dt>bufferSize
-  <dd>The receive buffer size.
-  <dt>callback
-  <dd>Delivers data that was available to be read without blocking.
-</dl>
+<p>The <dfn title=socket-Socket-recvFrom><code>recvFrom(socketId, bufferSize, callback)</code></dfn>
+function MUST run the following steps:
+<ol>
+  <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
+  <li>FIXME: Do sockets have a state machine that can throw an error here?
+  <li>Let <var>size</var> be the maximum of the number of bytes available for
+    reading in <var>socket</var> without blocking and <var>bufferSize</var>
+    (if <var>bufferSize</var> was specified).
+  <li>Read <var>size</var> octets from <var>socket</var> and store the result in
+    <var>incoming</var>.
+  <li>Schedule a task to call <var>callback</var> with a <code>RecvFromInfo</code>
+    dictionary with:
+    <ul>
+      <li><code>resultCode</code> equal to ???
+      <li><code>data</code> containing <var>incoming</var>.
+      <li><code>address</code> equal to the address from which the user agent
+        received <var>incoming</var>.
+      <li><code>port</code> equal to the port from which the user agent
+        received <var>incoming</var>.
+    </ul>
+</ol>
 
 <p>The <dfn title=socket-Socket-sendTo><code>sendTo</code></dfn> function
 writes data on the given socket.
