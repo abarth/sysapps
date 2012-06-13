@@ -341,13 +341,13 @@ function MUST run the following steps:
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>If <var>socket</var> is not a UDP socket,
     <span data-anolis-spec=html>Queue a task</span> to invoke
-    <var>callback</var> with <code>result</code> ??? and abort these steps.
+    <var>callback</var> with <code>result</code> equal to ??? and abort these steps.
   <li>If <var>address</var> is not an address of the local machine,
     <span data-anolis-spec=html>Queue a task</span> to invoke
-    <var>callback</var> with a <code>result</code> ??? and abort these steps.
+    <var>callback</var> with a <code>result</code> equal to ??? and abort these steps.
   <li>Attempt to bind a UDP socket to <var>address</var> on port <var>port</var>.
   <li><span data-anolis-spec=html>Queue a task</span> to invoke
-    <var>callback</var> with <code>result</code> ???.
+    <var>callback</var> with <code>result</code> equal to ???.
 </ol>
 
 <p>The <dfn title=socket-Socket-disconnect><code>disconnect(<var>socketId</var>)</code></dfn>
