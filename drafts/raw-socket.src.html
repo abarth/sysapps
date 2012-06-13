@@ -299,6 +299,7 @@ function rather than using member functions on a Socket object?
 <p>The <dfn title=socket-Socket-create><code>create(<var>type</var>, <var>options</var>, <var>callback</var>)</code></dfn>
 function MUST run the following steps:
 <ol>
+  <li>Return, but continue running these steps asynchronously.
   <li>
     <dl>
       <dt>If <var>type</var> is <code>tcp</code>,
@@ -321,6 +322,7 @@ FIXME: What happens to sockets in each state of the state machine?
 <p>The <dfn title=socket-Socket-connect><code>connect(<var>socketId</var>, <var>hostname</var>, <var>port</var>, <var>callback</var>)</code></dfn>
 function MUST run the following steps:
 <ol>
+  <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>Let <var>address</var> be the result of resolving <var>hostname</var> via DNS.
@@ -331,6 +333,7 @@ function MUST run the following steps:
 <p>The <dfn title=socket-Socket-bind><code>bind(<var>socketId</var>, <var>address</var>, <var>port</var>, <var>callback</var>)</code></dfn>
 function MUST run the following steps:
 <ol>
+  <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>If <var>socket</var> is not a UDP socket, schedule a task to call
@@ -345,6 +348,7 @@ function MUST run the following steps:
 <p>The <dfn title=socket-Socket-disconnect><code>disconnect(<var>socketId</var>)</code></dfn>
 function MUST run the following steps:
 <ol>
+  <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>If <var>socket</var> is not a TCP socket, abort these steps.
@@ -354,6 +358,7 @@ function MUST run the following steps:
 <p>The <dfn title=socket-Socket-read><code>read(<var>socketId</var>, <var>bufferSize</var>, <var>callback</var>)</code></dfn>
 function MUST run the following steps:
 <ol>
+  <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>Let <var>size</var> be the maximum of the number of bytes available for
@@ -369,6 +374,7 @@ function MUST run the following steps:
 <p>The <dfn title=socket-Socket-write><code>write(<var>socketId</var>, <var>data</var>, <var>callback</var>)</code></dfn>
 function MUST run the following steps:
 <ol>
+  <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>Let <var>outgoing</var> be the sequence of octets contained in <var>data</var>.
@@ -396,6 +402,7 @@ function MUST run the following steps:
 <p>The <dfn title=socket-Socket-recvFrom><code>recvFrom(<var>socketId</var>, <var>bufferSize</var>, <var>callback</var>)</code></dfn>
 function MUST run the following steps:
 <ol>
+  <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>Let <var>size</var> be the maximum of the number of bytes available for
@@ -417,33 +424,36 @@ function MUST run the following steps:
 
 <p>The <dfn title=socket-Socket-sendTo><code>sendTo(<var>socketId</var>, <var>data</var>, <var>address</var>, <var>port</var>, <var>callback</var>)</code></dfn>
 function must run the following steps:
-<li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
-<li>FIXME: Do sockets have a state machine that can throw an error here?
-<li>Let <var>outgoing</var> be the sequence of octets contained in <var>data</var>.
-<li>Attempt to send <var>outgoing</var> to <var>address</var> on port <var>port</var>.
-<li>
-  <dl>
-    <dt>If the write operation completes without blocking:
-    <dd>Schedule a task to call <var>callback</var> with a <code>WriteInfo</code>
-      dictionary with <code>bytesWritten</code> equal to the number of octets
-      successfully written into the <var>socket</var>.
-    <dt>If the write operation blocked before completing:
-    <dd>
-      <ol>
-        <li>Schedule a task to call <var>callback</var> with a <code>WriteInfo</code>
-          dictionary with <code>bytesWritten</code> equal to the number of
-          octets successfully written into the <var>socket</var>.
-        <li>Spin the event loop until the write operation completes.
-        <li>Schedule a task to fire a ??? event on ???.
-      </ol>
-    <dt>If an error occurs:
-    <dd>Schedule a task to ???
-  </dl>
+<ol>
+  <li>Return, but continue running these steps asynchronously.
+  <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
+  <li>FIXME: Do sockets have a state machine that can throw an error here?
+  <li>Let <var>outgoing</var> be the sequence of octets contained in <var>data</var>.
+  <li>Attempt to send <var>outgoing</var> to <var>address</var> on port <var>port</var>.
+  <li>
+    <dl>
+      <dt>If the write operation completes without blocking:
+      <dd>Schedule a task to call <var>callback</var> with a <code>WriteInfo</code>
+        dictionary with <code>bytesWritten</code> equal to the number of octets
+        successfully written into the <var>socket</var>.
+      <dt>If the write operation blocked before completing:
+      <dd>
+        <ol>
+          <li>Schedule a task to call <var>callback</var> with a <code>WriteInfo</code>
+            dictionary with <code>bytesWritten</code> equal to the number of
+            octets successfully written into the <var>socket</var>.
+          <li>Spin the event loop until the write operation completes.
+          <li>Schedule a task to fire a ??? event on ???.
+        </ol>
+      <dt>If an error occurs:
+      <dd>Schedule a task to ???
+    </dl>
 </ol>
 
 <p>The <dfn title=socket-Socket-setKeepAlive><code>setKeepAlive(<var>socketId</var>, <var>enable</var>, <var>delay</var>, <var>callback</var>)</code></dfn>
 function MUST run the following steps:
 <ol>
+  <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>Set the <var>keep alive</var> flag on <var>socket</var> to <var>enable</var>.
@@ -456,6 +466,7 @@ function MUST run the following steps:
 <p>The <dfn title=socket-Socket-setNoDelay><code>setNoDelay(<var>socketId</var>, <var>noDelay</var>, <var>callback</var>)</code></dfn>
 function MUST run the following steps:
 <ol>
+  <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>
