@@ -304,46 +304,39 @@ function runs the following steps:
       <dd>let <var>socket</var> be a UDP socket.
       <dt>Otherwise,
       <dd>schedule a task to call <var>callback</var> with a <code>CreateInfo</code>
-      dictionary with <code>socketId</code> set to 0.
+      dictionary with <code>socketId</code> set to 0 and abort these steps.
     </dl>
   <li>Assign a unique identifier <var>id</var> to <var>socket</var>.
   <li>Schedule a task to call <var>callback</var> with a <code>CreateInfo</code>
   dictionary with <code>socketId</code> set to <var>id</var>.
 </ol>
 
-<p>The <dfn title=socket-Socket-destroy><code>destroy</code></dfn> function
-destroys the socket. Each socket created should be destroyed after use.
-<dl>
-  <dt>socketId
-  <dd>The socketId.
-</dl>
+<p>The <dfn title=socket-Socket-destroy><code>destroy(<var>socketId</code>)</code></dfn>
+function destroys the socket. Each socket created SHOULD be destroyed after use.
 
-<p>The <dfn title=socket-Socket-connect><code>connect</code></dfn> function
-connects the socket to the remote machine.
-<dl>
-  <dt>socketId
-  <dd>The socketId.
-  <dt>hostname
-  <dd>The hostname or IP address of the remote machine.
-  <dt>port
-  <dd>The port of the remote machine.
-  <dt>callback
-  <dd>Called when the connection attempt is complete.
-</dl>
+<p>The <dfn title=socket-Socket-connect><code>connect(<var>socketId</var>, <var>hostname</var>, <var>port</var>, <var>callback</var>)</code></dfn>
+function runs the following steps:
+<ol>
+  <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>
+  <li>FIXME: Do sockets have a state machine that can throw an error here?
+  <li>Let <var>address</var> be the result of resolving <var>hostname</var> via DNS.
+  <li>Connect <var>socket<var> to <var>address</var> on port <var>port</var>.
+  <li>Schedule a task to call <var>callback</var> with <code>result</code> ???.
+</ol>
 
-<p>The <dfn title=socket-Socket-bind><code>bind</code></dfn> function
-binds the local address for socket. Currently, it does not support
-TCP socket.
-<dl>
-  <dt>socketId
-  <dd>The socketId.
-  <dt>address
-  <dd>The address of the local machine.
-  <dt>port
-  <dd>The port of the local machine.
-  <dt>callback
-  <dd>Called when the bind attempt is complete.
-</dl>
+<p>The <dfn title=socket-Socket-bind><code>bind(<var>socketId</var>, <var>address</var>, <var>port</var>, <var>callback</var>)</code></dfn>
+function runs the following steps:
+<ol>
+  <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>
+  <li>FIXME: Do sockets have a state machine that can throw an error here?
+  <li>If <var>socket</var> is not a UDP socket, schedule a task to call
+    <var>callback</var> with <code>result</code> ??? and abort these steps.
+  <li>If <var>address</var> is not an address of the local machine,
+    schedule a task to call <var>callback</var> with a <code>result</code> ???
+    and abort these steps.
+  <li>Attempt to bind a UDP socket to <var>address</var> on port <var>port</var>.
+  <li>Schedule a task to call <var>callback</var> with <code>result</code> ???.
+</ol>
 
 <p>The <dfn title=socket-Socket-disconnect><code>disconnect</code></dfn> function
 disconnects the socket. For UDP sockets, <code>disconnect</code> is a
