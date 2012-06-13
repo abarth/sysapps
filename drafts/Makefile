@@ -1,17 +1,17 @@
 ANOLIS = anolis
 
-all: raw-socket.html data/xrefs/sysapps/raw-socket.json
+all: raw-sockets.html data/xrefs/sysapps/raw-sockets.json
 
-raw-socket.html: raw-socket.src.html data Makefile
+raw-sockets.html: raw-sockets.src.html data Makefile
 	$(ANOLIS) --output-encoding=ascii --omit-optional-tags --quote-attr-values \
-	--w3c-compat --enable=xspecxref --enable=refs --w3c-shortname="raw-socket" \
+	--w3c-compat --enable=xspecxref --enable=refs --w3c-shortname="raw-sockets" \
 	--filter=".publish, .now3c" $< $@
 
-data/xrefs/sysapps/raw-socket.json: raw-socket.src.html Makefile
+data/xrefs/sysapps/raw-sockets.json: raw-sockets.src.html Makefile
 	$(ANOLIS) --dump-xrefs=$@ $< /tmp/spec
 
-publish:: raw-socket.src.html data Makefile
+publish:: raw-sockets.src.html data Makefile
 	$(ANOLIS) --output-encoding=ascii --omit-optional-tags --quote-attr-values \
-	--w3c-compat --enable=xspecxref --enable=refs --w3c-shortname="raw-socket" \
+	--w3c-compat --enable=xspecxref --enable=refs --w3c-shortname="raw-wsockets" \
 	--filter=".dontpublish, .now3c" --pubdate="$(PUBDATE)" --w3c-status=WD \
-	$< raw-socket.html
+	$< raw-sockets.html
