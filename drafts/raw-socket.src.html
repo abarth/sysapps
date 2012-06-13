@@ -300,13 +300,13 @@ function rather than using member functions on a Socket object?
 function MUST run these steps:
 <ol>
   <li>Return, but continue running these steps asynchronously.
-  <li>
-    <dl>
-      <dt>If <var>type</var> is <code>tcp</code>,
-      <dd>let <var>socket</var> be a TCP socket.
-      <dt>Otherwise, if <var>type</var> is <code>udp</code>,
-      <dd>let <var>socket</var> be a UDP socket.
-      <dt>Otherwise,
+  <li>Process <var>type</var>:
+    <dl class=switch>
+      <dt>If <var>type</var> is <code>tcp</code>:
+      <dd>Let <var>socket</var> be a TCP socket.
+      <dt>Otherwise, if <var>type</var> is <code>udp</code>:
+      <dd>Let <var>socket</var> be a UDP socket.
+      <dt>Otherwise:
       <dd><span data-anolis-spec=html>Queue a task</span> to invoke
         <var>callback</var> with a <code>CreateInfo</code> dictionary with <code>socketId</code> equal
         to 0 and abort these steps.
@@ -383,9 +383,8 @@ function MUST run these steps:
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>Let <var>outgoing</var> be the sequence of octets contained in <var>data</var>.
-  <li>Attempt to write <var>outgoing</var> into <var>socket</var>.
-  <li>
-    <dl>
+  <li>Attempt to write <var>outgoing</var> into <var>socket</var>:
+    <dl class=switch>
       <dt>If the write operation completes without blocking:
       <dd><span data-anolis-spec=html>Queue a task</span> to invoke
         <var>callback</var> with a <code>WriteInfo</code> dictionary with <code>bytesWritten</code>
@@ -436,8 +435,7 @@ function must run these steps:
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>Let <var>outgoing</var> be the sequence of octets contained in <var>data</var>.
   <li>Attempt to send <var>outgoing</var> to <var>address</var> on port <var>port</var>.
-  <li>
-    <dl>
+    <dl class=switch>
       <dt>If the write operation completes without blocking:
       <dd><span data-anolis-spec=html>Queue a task</span> to invoke
         <var>callback</var> with a <code>WriteInfo</code> dictionary with <code>bytesWritten</code>
@@ -476,12 +474,12 @@ function MUST run these steps:
   <li>Return, but continue running these steps asynchronously.
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
-  <li>
-    <dl>
-      <dt>If <var>noDelay</var> is true,
-      <dd>disable the Nagle algorithm for <var>socket</var>. FIXME: Citation needed.
-      <dt>Otherwise,
-      <dd>enable the Nagle algorithm.
+  <li>Process <var>noDelay</var>:
+    <dl class=switch>
+      <dt>If <var>noDelay</var> is true:
+      <dd>Disable the Nagle algorithm for <var>socket</var>. FIXME: Citation needed.
+      <dt>Otherwise:
+      <dd>Enable the Nagle algorithm.
     </dl>
   <li><span data-anolis-spec=html>Queue a task</span> to invoke
     <var>callback</var> with <code>result</code> equal to ???
