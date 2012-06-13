@@ -391,10 +391,9 @@ function MUST run the following steps:
       <dt>If an error occurs:
       <dd>Schedule a task to ???
     </dl>
-  <li>
 </ol>
 
-<p>The <dfn title=socket-Socket-recvFrom><code>recvFrom(socketId, bufferSize, callback)</code></dfn>
+<p>The <dfn title=socket-Socket-recvFrom><code>recvFrom(<var>socketId</var>, <var>bufferSize</var>, <var>callback</var>)</code></dfn>
 function MUST run the following steps:
 <ol>
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
@@ -416,36 +415,43 @@ function MUST run the following steps:
     </ul>
 </ol>
 
-<p>The <dfn title=socket-Socket-sendTo><code>sendTo</code></dfn> function
-writes data on the given socket.
-<dl>
-  <dt>socketId
-  <dd>The socketId.
-  <dt>data
-  <dd>The data to write.
-  <dt>address
-  <dd>The address of the remote machine.
-  <dt>port
-  <dd>The port of the remote machine.
-  <dt>callback
-  <dd>Called when the first of any of the following happens: the
-write operation completes without blocking, the write operation blocked
-before completion (in which case onEvent() will eventually be called with
-a <code>writeComplete</code> event), or an error occurred.
-</dl>
+<p>The <dfn title=socket-Socket-sendTo><code>sendTo(<var>socketId</var>, <var>data</var>, <var>address</var>, <var>port</var>, <var>callback</var>)</code></dfn>
+function must run the following steps:
+<li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
+<li>FIXME: Do sockets have a state machine that can throw an error here?
+<li>Let <var>outgoing</var> be the sequence of octets contained in <var>data</var>.
+<li>Attempt to send <var>outgoing</var> to <var>address</var> on port <var>port</var>.
+<li>
+  <dl>
+    <dt>If the write operation completes without blocking:
+    <dd>Schedule a task to call <var>callback</var> with a <code>WriteInfo</code>
+      dictionary with <code>bytesWritten</code> equal to the number of octets
+      successfully written into the <var>socket</var>.
+    <dt>If the write operation blocked before completing:
+    <dd>
+      <ol>
+        <li>Schedule a task to call <var>callback</var> with a <code>WriteInfo</code>
+          dictionary with <code>bytesWritten</code> equal to the number of
+          octets successfully written into the <var>socket</var>.
+        <li>Spin the event loop until the write operation completes.
+        <li>Schedule a task to fire a ??? event on ???.
+      </ol>
+    <dt>If an error occurs:
+    <dd>Schedule a task to ???
+  </dl>
+</ol>
 
-<p>The <dfn title=socket-Socket-setKeepAlive><code>setKeepAlive</code></dfn> function
-enable/disable keep-alive functionality for a TCP connection.
-<dl>
-  <dt>socketId
-  <dd>The socketId.
-  <dt>enable
-  <dd>If true, enable keep-alive functionality.
-  <dt>delay
-  <dd>Set the delay seconds between the last data packet received and the first keepalive probe. Default is 0.
-  <dt>callback
-  <dd>Called when the setKeepAlive attempt is complete.
-</dl>
+<p>The <dfn title=socket-Socket-setKeepAlive><code>setKeepAlive(<var>socketId</var>, <var>enable</var>, <var>delay</var>, <var>callback</var>)</code></dfn>
+function MUST run the following steps:
+<ol>
+  <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
+  <li>FIXME: Do sockets have a state machine that can throw an error here?
+  <li>Set the <var>keep alive</var> flag on <var>socket</var> to <var>enable</var>.
+  <li>Set the <var>probe delay</var> value on <var>socket</var> to <var>delay</var> if <var>delay</var> was specified and 0 otherwise.
+  <li>Schedule a task to call <var>callback</var> with <code>result</code>
+    equal to ???
+  <li>FIXME: Do we need to spec the keepalive loop or can we refer to another spec for that?
+</ol>
 
 <p>The <dfn title=socket-Socket-setNoDelay><code>setNoDelay</code></dfn> function
 enable/disable Nagle algorithm.
