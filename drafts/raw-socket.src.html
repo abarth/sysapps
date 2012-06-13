@@ -308,7 +308,7 @@ function runs the following steps:
     </dl>
   <li>Assign a unique identifier <var>id</var> to <var>socket</var>.
   <li>Schedule a task to call <var>callback</var> with a <code>CreateInfo</code>
-  dictionary with <code>socketId</code> set to <var>id</var>.
+    dictionary with <code>socketId</code> set to <var>id</var>.
 </ol>
 
 <p>The <dfn title=socket-Socket-destroy><code>destroy(<var>socketId</code>)</code></dfn>
@@ -317,7 +317,7 @@ function destroys the socket. Each socket created SHOULD be destroyed after use.
 <p>The <dfn title=socket-Socket-connect><code>connect(<var>socketId</var>, <var>hostname</var>, <var>port</var>, <var>callback</var>)</code></dfn>
 function runs the following steps:
 <ol>
-  <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>
+  <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>Let <var>address</var> be the result of resolving <var>hostname</var> via DNS.
   <li>Connect <var>socket<var> to <var>address</var> on port <var>port</var>.
@@ -327,7 +327,7 @@ function runs the following steps:
 <p>The <dfn title=socket-Socket-bind><code>bind(<var>socketId</var>, <var>address</var>, <var>port</var>, <var>callback</var>)</code></dfn>
 function runs the following steps:
 <ol>
-  <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>
+  <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>If <var>socket</var> is not a UDP socket, schedule a task to call
     <var>callback</var> with <code>result</code> ??? and abort these steps.
@@ -338,16 +338,40 @@ function runs the following steps:
   <li>Schedule a task to call <var>callback</var> with <code>result</code> ???.
 </ol>
 
-<p>The <dfn title=socket-Socket-disconnect><code>disconnect</code></dfn> function
-disconnects the socket. For UDP sockets, <code>disconnect</code> is a
-non-operation but is safe to call.
-<dl>
-  <dt>socketId
-  <dd>The socketId.
-</dl>
+<p>The <dfn title=socket-Socket-disconnect><code>disconnect(<var>socketId</var>)</code></dfn>
+function runs the following steps:
+<ol>
+  <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
+    <li>FIXME: Do sockets have a state machine that can throw an error here?
+  <li>If <var>socket</var> is not a TCP socket, abort these steps.
+  <li>Disconnect <var>socket</var> from the remote host.
+</ol>
 
-<p>The <dfn title=socket-Socket-read><code>read</code></dfn> function
-reads data from the given socket.
+<p>The <dfn title=socket-Socket-read><code>read(<var>socketId</var>, <var>bufferSize</var>, <var>callback</var>)</code></dfn>
+function runs the following steps:
+<ol>
+  <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
+  <li>FIXME: Do sockets have a state machine that can throw an error here?
+  <li>Wait for one of the following conditions:
+    <ul>
+      <li>The remote host terminates <var>socket</var>.
+      <li>The <var>socket</var> has at least <var>bufferSize</var> bytes
+        available for reading (if <var>bufferSize</var> was specified).
+      <li>The <var>socket</var> has at least one byte available for reading
+        (if <var>bufferSize</var> was not specified).
+      <li>An implementation-defined period of time has elapsed.
+    </ul>
+  <li>Let <var>size</var> be the maximum of the number of bytes available for
+    reading in <var>socket</var> and <var>bufferSize</var> (if <var>bufferSize</var>
+    was specified).
+  <li>Read <var>size</var> bytes from <var>socket</var> and store the result in
+    <var>bytes</var>.
+  <li>Schedule a task to call <var>callback</var> with a <code>ReadInfo</code>
+    dictionary with <code>data</code> containing <var>bytes</var> and
+    <code>resultCode</code> ???.
+</ol>
+
+
 <dl>
   <dt>socketId
   <dd>The socketId.
