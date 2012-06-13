@@ -293,8 +293,11 @@ interface <dfn>SetNoDelayCallback</dfn> {
   static void <span title=socket-Socket-setNoDelay>setNoDelay</span>(long socketId, boolean noDelay, SetNoDelayCallback callback);
 };</pre>
 
+<p>FIXME: Why do we pass a <code>socketId</code> parameter to each of these
+function rather than using member functions on a Socket object?
+
 <p>The <dfn title=socket-Socket-create><code>create(<var>type</var>, <var>options</var>, <var>callback</var>)</code></dfn>
-function runs the following steps:
+function MUST run the following steps:
 <ol>
   <li>
     <dl>
@@ -312,10 +315,11 @@ function runs the following steps:
 </ol>
 
 <p>The <dfn title=socket-Socket-destroy><code>destroy(<var>socketId</code>)</code></dfn>
-function destroys the socket. Each socket created SHOULD be destroyed after use.
+function MUST destroy the socket. Each socket created SHOULD be destroyed after use.
+FIXME: What happens to sockets in each state of the state machine?
 
 <p>The <dfn title=socket-Socket-connect><code>connect(<var>socketId</var>, <var>hostname</var>, <var>port</var>, <var>callback</var>)</code></dfn>
-function runs the following steps:
+function MUST run the following steps:
 <ol>
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
@@ -325,7 +329,7 @@ function runs the following steps:
 </ol>
 
 <p>The <dfn title=socket-Socket-bind><code>bind(<var>socketId</var>, <var>address</var>, <var>port</var>, <var>callback</var>)</code></dfn>
-function runs the following steps:
+function MUST run the following steps:
 <ol>
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
@@ -339,7 +343,7 @@ function runs the following steps:
 </ol>
 
 <p>The <dfn title=socket-Socket-disconnect><code>disconnect(<var>socketId</var>)</code></dfn>
-function runs the following steps:
+function MUST run the following steps:
 <ol>
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
     <li>FIXME: Do sockets have a state machine that can throw an error here?
@@ -348,33 +352,47 @@ function runs the following steps:
 </ol>
 
 <p>The <dfn title=socket-Socket-read><code>read(<var>socketId</var>, <var>bufferSize</var>, <var>callback</var>)</code></dfn>
-function runs the following steps:
+function MUST run the following steps:
 <ol>
   <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
   <li>FIXME: Do sockets have a state machine that can throw an error here?
   <li>Let <var>size</var> be the maximum of the number of bytes available for
     reading in <var>socket</var> and <var>bufferSize</var> (if <var>bufferSize</var>
     was specified).
-  <li>Read <var>size</var> bytes from <var>socket</var> and store the result in
-    <var>bytes</var>.
+  <li>Read <var>size</var> octets from <var>socket</var> and store the result in
+    <var>incoming</var>.
   <li>Schedule a task to call <var>callback</var> with a <code>ReadInfo</code>
-    dictionary with <code>data</code> containing <var>bytes</var> and
+    dictionary with <code>data</code> containing <var>incoming</var> and
     <code>resultCode</code> ???.
 </ol>
 
-<p>The <dfn title=socket-Socket-write><code>write</code></dfn> function
-writes data on the given socket.
-<dl>
-  <dt>socketId
-  <dd>The socketId.
-  <dt>data
-  <dd>The data to write.
-  <dt>callback
-  <dd>Called when the first of any of the following happens: the
-write operation completes without blocking, the write operation blocked
-before completion (in which case onEvent() will eventually be called with
-a <code>writeComplete</code> event), or an error occurred.
-</dl>
+<p>The <dfn title=socket-Socket-write><code>write(<var>socketId</var>, <var>data</var>, <var>callback</var>)</code></dfn>
+function MUST run the following steps:
+<ol>
+  <li>Let <var>socket</var> be the socket with identifier <var>socketId</var>.
+  <li>FIXME: Do sockets have a state machine that can throw an error here?
+  <li>Let <var>outgoing</var> be the sequence of octets contained in <var>data</var>.
+  <li>Attempt to write <var>outgoing</var> into <var>socket</var>.
+  <li>
+    <dl>
+      <dt>If the write operation completes without blocking:
+      <dd>Schedule a task to call <var>callback</var> with a <code>WriteInfo</code>
+        dictionary with <code>bytesWritten</code> equal to the number of octets
+        successfully written into the <var>socket</var>.
+      <dt>If the write operation blocked before completing:
+      <dd>
+        <ol>
+          <li>Schedule a task to call <var>callback</var> with a <code>WriteInfo</code>
+            dictionary with <code>bytesWritten</code> equal to the number of
+            octets successfully written into the <var>socket</var>.
+          <li>Spin the event loop until the write operation completes.
+          <li>Schedule a task to fire a ??? event on ???.
+        </ol>
+      <dt>If an error occurs:
+      <dd>Schedule a task to ???
+    </dl>
+  <li>
+</ol>
 
 <p>The <dfn title=socket-Socket-recvFrom><code>recvFrom</code></dfn> function
 reads data from the given socket.
