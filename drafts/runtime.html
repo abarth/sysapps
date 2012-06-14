@@ -94,6 +94,10 @@
    <li><a href="#update"><span class="secno">3.7 </span>Update</a></li>
    <li><a href="#uninstallation"><span class="secno">3.8 </span>Uninstallation</a></ol></li>
  <li><a href="#conventions"><span class="secno">4 </span>Conventions</a></li>
+ <li><a href="#differences-from-the-web-platform"><span class="secno">5 </span>Differences from the Web Platform</a>
+  <ol class="toc">
+   <li><a href="#differences"><span class="secno">5.1 </span>Differences</a></li>
+   <li><a href="#disabled-features"><span class="secno">5.2 </span>Disabled Features</a></ol></li>
  <li><a class="no-num" href="#references">References</a></li>
  <li><a class="no-num" href="#acknowledgments">Acknowledgments</a></ol>
 <!--end-toc-->
@@ -318,6 +322,10 @@ runtime must not let the application show down or cancel termination, including
 prompting the user.  Applications should automatically save their state
 periodically to protect against data loss.
 
+<p>The runtime should avoid terminating the active, focused application if at
+all possible. However, the runtime may terminate that application as a last
+resort (e.g., due to resource exhaustion or bad behavior).
+
 <h3 id="update"><span class="secno">3.7 </span>Update</h3>
 
 <p>The runtime may update applications whenever the application's event page is
@@ -390,9 +398,90 @@ contacts API).
 
 
 
+<h2 id="differences-from-the-web-platform"><span class="secno">5 </span>Differences from the Web Platform</h2>
+
+<p>The System Applications Runtime is based on the web platform, but has some
+differences.  Some features have been added and some have been removed.  Other
+features are used in the same way but have different behavior behavior
+differences.
+
+<h3 id="differences"><span class="secno">5.1 </span>Differences</h3>
+
+<p>Each application must run in single origin <a href="#refsRFC6454">[RFC6454]</a>,
+separate from the origins used by other applications and web sites.
+
+<p>Each application must have <dfn id="concept-isolated-storage" title="concept-isolated-storage">isolated
+storage</dfn>, a separate copy of each type of persistent storage, including
+cookies and databases, from other applications and from the browser. For
+example, if the application makes an HTTP request for
+<code>https://example.com/</code> and the <code>example.com</code> server
+responds with a <code>Set-Cookie</code> header <a href="#refsRFC6265">[RFC6265]</a>, then subsequent HTTP requests to
+<code>example.com</code> made by the application will include the cookie, but
+requests made by other applications, or by the browser, will not include the
+cookie, even if those requests are for <code>example.com</code>.
+
+<p>The runtime must allow applications to issue <code>XMLHttpRequests</code> to
+every <code>http</code> and <code>https</code> URI without using Cross-Origin
+Resource Sharing <a href="#refsCORS">[CORS]</a>.  In particular, cookie
+should be enabled during these requests, but, due to isolated storage, the
+cookie jar for each host must be empty when the application is installed.
+
+<p>The runtime calls a callback in the application when the runtime is about to
+terminate the application.  (FIXME: Should this information bein the lifecycle
+section?) Once the runtime calls this callback, the runtime must hide the
+application and prevent the appplciation from presenting any user interface
+elements to the user.  After five seconds, the runtime will terminate the
+application.  Applications should use this time to complete their current
+tasks, but applications should not rely upon this notification to prevent data
+less because the runtime may terminate the application without notice if
+necessary. Instead, applications should use this notification to clean up
+shared resource gracefully, such as disconnecting from remote servers.
+
+<p>The runtime must let applications open multiple windows without explicit
+user gestures.  When opening a window, the opener is given a reference to the
+window's <code>DOMWindow</code> object. The runtime must provide an API for
+enumerating all of the application's open windows (FIXME: Spec this API).
+
+<h3 id="disabled-features"><span class="secno">5.2 </span>Disabled Features</h3>
+
+<p>The runtime must prevent the application from loading remote subresources
+using mechanisms that do not have a reasonable offline user experience or
+programmatic error handling.  For example, the runtime must prevent the
+application from loading remote scripts, workers, iframes, images, and style
+sheets.  FIXME: Nail down this list.
+
+<p>The runtime must allow the application to load remove audio and video
+resource.  FIXME: Is this requirement based on some rationale or should we just
+have a list of what is and is not allowed?
+
+<p>FIXME: Fill out this section.
+<ul>
+  <li>Navigation.  Links open up with the system web browser.  window.history
+    and window.location are disabled.
+  <li>Synchronous, blocking APIs.  (document.cookie, localstorage, sync XHR,
+    alert, confirm, prompt, print and showModalDialog)
+  <li>Non-sandboxed plugins.
+  <li>WebSQL.
+  <li>Page finalizers (unload and beforeunload events)
+  <li>Browser "chrome" APIs (window.locationbar, window.menubar,
+    window.external, window,sidebar, etc.).
+  <li>form submission.
+</ul>
+
+
+
 <h2 class="no-num" id="references">References</h2>
-<div id="anolis-references"><dl><dt id="refsRFC2119">[RFC2119]
+<div id="anolis-references"><dl><dt id="refsCORS">[CORS]
+<dd><cite><a href="http://dvcs.w3.org/hg/cors/raw-file/tip/Overview.html">Cross-Origin Resource Sharing</a></cite>, Anne van Kesteren. W3C.
+
+<dt id="refsRFC2119">[RFC2119]
 <dd><cite><a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a></cite>, Scott Bradner. IETF.
+
+<dt id="refsRFC6265">[RFC6265]
+<dd><cite><a href="http://tools.ietf.org/html/rfc6265">HTTP State Management Mechanism</a></cite>, A. Barth. IETF.
+
+<dt id="refsRFC6454">[RFC6454]
+<dd><cite><a href="http://tools.ietf.org/html/rfc6454">The Web Origin Concept</a></cite>, A. Barth. IETF.
 
 <dt id="refsWEBIDL">[WEBIDL]
 <dd><cite><a href="http://dev.w3.org/2006/webapi/WebIDL/">Web IDL</a></cite>, Cameron McCormack. W3C.

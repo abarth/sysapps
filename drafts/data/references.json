@@ -286,6 +286,18 @@
     "authors" : ["Martin Dürst", "Michel Suignard"],
     "publisher" : "IETF"
   },
+  "RFC6265": {
+    "title": "HTTP State Management Mechanism",
+    "href": "http://tools.ietf.org/html/rfc6265",
+    "authors": ["A. Barth"],
+    "publisher": "IETF"
+  },
+  "RFC6454": {
+    "title": "The Web Origin Concept",
+    "href": "http://tools.ietf.org/html/rfc6454",
+    "authors": ["A. Barth"],
+    "publisher": "IETF"
+  },
   "SELECTORS" : {
     "href" : "http://dev.w3.org/csswg/selectors3/",
     "title" : "Selectors Level 3",
