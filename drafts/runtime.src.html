@@ -236,8 +236,8 @@ specification. <span data-anolis-ref>WEBIDL</span>
   <dt>Resistant
   <dd>The runtime must be resistant to vulnerabilities that could lead to
     remote security exploits.  For example, the runtime should make it
-    difficult for attackers to mount a cros-site scripting attack against
-    System Applciations.
+    difficult for attackers to mount a cross-site scripting attack against
+    System Applications.
   <dt>Ephemeral
   <dd>A System Application must be prepared to be terminated at any moment
     without notification.  The application should be able to restore itself to
@@ -258,9 +258,144 @@ specification. <span data-anolis-ref>WEBIDL</span>
 
 
 
-<h2>Terminology</h2>
+<h2>Application Lifecycle</h2>
 
-<p>TODO
+<h3>Installation</h3>
+
+<p>System Applications must define the complete set of permissions or
+capabilities that they require or might request at runtime.  This list is set
+at install time and must not be changed until the application is updated.
+Applications must be installed before they can be run with these permissions.
+This installation acts as a &quot;trust gesture&quot; and may be initiated
+either by the user or by a trusted delegate (e.g. operating system, device
+maker, device distributor, or enterprise policy).  User-initiated installation
+should include a confirmation step to mitigate the risk that a vulnerability in
+the runtime might cause automatic installation.
+
+<p>This document does not impose requires on what information, of any, should
+be presented as part of the installation experience.  It is up to the runtime
+vendor to determine how best to assess the trust level and risk level of an
+application and how or if to convey that information to the user.  In its
+simplest form, a confirmation might simply be an install button in some
+protected part of the runtime user interface.  A more typical install
+experience might present an &quot;are you sure?&quot; confirmation dialog that
+summarizes the permissions requested by the application.
+
+<h3>Event Page</h3>
+
+<p>During installation, the application must define an <dfn
+title=concept-event-page>event page</dfn>.  The event page is a resource within
+the application similar to other resources but with a few important
+differences:
+<ol>
+  <li>When running the event page, the runtime must not display display the
+    event page to the user. Instead, the page runs in the background.
+  <li>The event page is a singleton: there must be exactly one event page per
+    application.
+  <li>The runtime may close the event page in certain circumstances.  When an
+    event page is not executing any script, has no pending callbacks, and no
+    open windows, the runtime should close the event page.  In addition, the
+    runtime may close the event page in order to reduce resource consumption.
+</ol>
+
+<h3>Launch</h3>
+
+<p>When the user initiates application startup, the runtime <dfn
+title=concept-launches>launches</dfn> the application by running these steps:
+<ol>
+  <li>Instantiate the application's event page.
+  <li>Spin the event loop until the event page's <code>DOMContentLoaded</code>
+    event finishes firing. FIXME: Is this correct?
+  <li><span data-anolis-spec=html>Queue a task</span> to <span
+    data-anolis-spec=dom title=concept-event-fire>Fire an event</span> named
+    <code>launch</code> at the event page's <code>window</code> object.
+</ol>
+
+<p>Notice that the runtime does not create any visible windows when launching
+an application.  The application can choose whether to display any visible
+windows when handling the <code>launch</code> event.
+
+<h3>Event-initiated startup</h3>
+
+<p>The runtime may start the application for the purpose of delivering events
+from the system.  For example, a system-level service might ask an email
+application to send an email on its behalf.  To handle these causes, the
+runtime <dfn title=concept-background-launch>launches the application in the
+background</dfn> to handle an event <var>event</var> by running these steps:
+<ol>
+  <li>If the application's event page is not currently instantiated:
+    <ol>
+      <li>Instantiate the application's event page.
+      <li>Spin the event loop until the event page's
+        <code>DOMContentLoaded</code> event finishes firing. FIXME: Is this
+        correct?
+    </ol>
+  <li><span data-anolis-spec=html>Queue a task</span> to <span
+    data-anolis-spec=dom title=concept-event-fire>Fire</span> <var>event</var>
+    at the event page's <code>window</code> object.
+</ol>
+
+<p>The runtime should not indicate that applications launched are running in
+the runtime's primary user interface.  For example, the application should not
+appear in the operating system's task switcher.  The runtime may indicate that
+applications launched in this way are running in secondary user interface
+elements, such as a task manager or battery profiler.
+
+<p>Applications launched in this way can run for extended periods of time
+without being visible, for example, if they receive events frequently.
+Typically, applications should handle these events quickly and consume a
+minimal amount of resources when running in the background.
+
+<h3>Creating Windows</h3>
+
+<p>An event page may create one or more windows.  By default, these windows are
+created with a script connection to the event page and are directly scriptable
+by the event page.  FIXME: Do we want to specify an interface for creating an
+managing windows in this document?
+
+<h3>Termination</h3>
+
+<p>The application can <dfn title=concept-terminate>terminate</dfn> in a number
+of situations:
+<ul>
+  <li>The application may terminate by calling <code>window.close()</code>.
+  <li>The runtime may terminate the application if the application is idle
+    (i.e., not executing script, has no pending callbacks, and no open windows).
+  <li>The runtime may terminate the application to reduce overall resource
+    consumption by the runtime.
+</ul>
+
+<p>When an application is terminated, the runtime must close all of the
+application's pages, including the event page and any visible pages. The
+runtime must not let the application show down or cancel termination, including
+prompting the user.  Applications should automatically save their state
+periodically to protect against data loss.
+
+<h3>Update</h3>
+
+<p>The runtime may update applications whenever the application's event page is
+not instantiated.  When launched, the runtime must use the latest installed
+version of the application.
+
+<p>When updating, an application may request a change in its set of
+permissions. The runtime may require a trust gesture from the user to approve
+these changes.
+
+<h3>Uninstallation</h3>
+
+<p>The runtime must let the user <dfn title=concept-uninstall>uninstall</dfn>
+applications. If the application is running when uninstalled, the runtime must
+terminate the application. After uninstallation, there should be no
+code executing or private data stored by the runtime.
+
+<p>Uninstallation can lead to data loss because the runtime terminates the
+application without warning and deletes the application's private data. The
+runtime should warn the user about these hazards before uninstalling the
+application.
+
+<p>The runtime must prevent applications from persisting itself or a derived
+application after being uninstalled.  This requirement helps protect the user
+from persistent malware.
 
 
 

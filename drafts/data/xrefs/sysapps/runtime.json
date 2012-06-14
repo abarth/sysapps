@@ -1,3 +1,9 @@
 {
-  "definitions": {}
+  "definitions": {
+    "concept-background-launch": "concept-background-launch",
+    "concept-event-page": "concept-event-page",
+    "concept-launches": "concept-launches",
+    "concept-terminate": "concept-terminate",
+    "concept-uninstall": "concept-uninstall"
+  }
 }
