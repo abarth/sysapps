@@ -1,0 +1,167 @@
+<!DOCTYPE html><html lang="en-US"><head>
+  <meta charset="UTF-8">
+  <title>Security Model for System Application</title>
+  <!-- W3C only -->
+  <style>
+   pre.idl { border:solid thin; background:#eee; color:#000; padding:0.5em }
+   pre.idl :link, pre.idl :visited { color:inherit; background:transparent }
+   pre code { color:inherit; background:transparent }
+   .example { margin-left:1em; padding-left:1em; border-left:double; color:#222; background:#fcfcfc }
+   .note { margin-left:2em; font-weight:bold; font-style:italic; color:#008000 }
+   p.note::before { content:"Note: " }
+   .XXX { padding:.5em; border:solid #f00 }
+   p.XXX::before { content:"Issue: " }
+   dl.switch { padding-left:2em }
+   dl.switch > dt { text-indent:-1.5em }
+   dl.switch > dt:before { content:'\21AA'; padding:0 0.5em 0 0; display:inline-block; width:1em; text-align:right; line-height:0.5em }
+   dl.domintro { color: green; margin: 2em 0 2em 2em; padding: 0.5em 1em; border: none; background: #DDFFDD; }
+   dl.domintro dt, dl.domintro dt * { color: black; text-decoration: none; }
+   dl.domintro dd { margin: 0.5em 0 1em 2em; padding: 0; }
+   dl.domintro dd p { margin: 0.5em 0; }
+   dl.domintro:before { display: table; margin: -1em -0.5em -0.5em auto; width: auto; content: 'This box is non-normative. Implementation requirements are given below this box.'; color: red; border: solid 2px; background: white; padding: 0 0.25em; }
+   em.ct { text-transform:lowercase; font-variant:small-caps; font-style:normal }
+   dfn { font-weight:bold; font-style:normal }
+   code { color:orangered }
+   code :link, code :visited { color:inherit }
+   hr:not(.top) { display:block; background:none; border:none; padding:0; margin:2em 0; height:auto }
+   table { border-collapse:collapse; border-style:hidden hidden none hidden }
+   table thead { border-bottom:solid }
+   table tbody th:first-child { border-left:solid }
+   table td, table th { border-left:solid; border-right:solid; border-bottom:solid thin; vertical-align:top; padding:0.2em }
+
+   .warning { color: red; background: transparent; font-weight: bolder; font-style: italic; }
+   .warning p:first-child { margin-top: 0; }
+   .warning p:last-child { margin-bottom: 0; }
+   .warning:before { font-style: normal; }
+   p.warning:before { content: '\26A0 Warning! '; }
+  </style>
+  <style>
+   @media print {
+     [data-anolis-spec]::after { content:"[" attr(data-anolis-spec) "]"; font-size:.6em; vertical-align:super; text-transform:uppercase }
+   }
+  </style>
+  <link class="w3conly" href="http://www.w3.org/StyleSheets/TR/W3C-ED" rel="stylesheet" type="text/css">
+  </head>
+ <body>
+
+<div class="head">
+<div class="w3conly">
+
+<!--begin-logo-->
+<p><a href="http://www.w3.org/"><img alt="W3C" height="48" src="http://www.w3.org/Icons/w3c_home" width="72"></a></p>
+<!--end-logo-->
+</div>
+ <h1>Security Model for System Application</h1>
+ <h2 class="no-num no-toc" id="editor's-draft-14-june-2012">
+  <span class="w3conly">Editor's Draft 14 June 2012</span>
+  </h2>
+
+ <dl>
+  <dt>This Version:
+  <dd class="dontpublish w3conly"><a href="http://dvcs.w3.org/hg/????/raw-file/tip/security.html">http://dvcs.w3.org/hg/???/raw-file/tip/security.html</a>
+  <dt class="dontpublish">Participate:</dt>
+  <dd class="dontpublish">Send feedback to
+  <a href="mailto:public-sysapps@w3.org?subject=%5BSSecurity%5D%20">public-sysapps@w3.org</a> (<a href="http://lists.w3.org/Archives/Public/public-sysapps/">archives</a>)
+
+  <dt>Editors:
+  <dd>???
+ </dl>
+
+<div class="w3conly">
+<!--begin-copyright-->
+<p class="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> &copy; 2012 <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>&reg;</sup> (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="http://www.keio.ac.jp/">Keio</a>), All Rights Reserved. W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.</p>
+<!--end-copyright--></div>
+</div>
+
+
+
+<h2 class="no-num no-toc" id="table-of-contents">Table of Contents</h2>
+
+<!--begin-toc-->
+<ol class="toc">
+ <li><a href="#conformance"><span class="secno">1 </span>Conformance</a>
+  <ol class="toc">
+   <li><a href="#dependencies"><span class="secno">1.1 </span>Dependencies</a></ol></li>
+ <li><a href="#terminology"><span class="secno">2 </span>Terminology</a></li>
+ <li><a class="no-num" href="#references">References</a></li>
+ <li><a class="no-num" href="#acknowledgments">Acknowledgments</a></ol>
+<!--end-toc-->
+
+
+
+<h2 id="conformance"><span class="secno">1 </span>Conformance</h2>
+<p>All diagrams, examples, and notes in this specification are
+non-normative, as are all sections explicitly marked non-normative.
+Everything else in this specification is normative.
+
+<p>The key words "MUST", "MUST NOT", "REQUIRED", <!--"SHALL", "SHALL
+NOT",--> "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and
+"OPTIONAL" in the normative parts of this document are to be
+interpreted as described in RFC2119. For readability, these words do
+not appear in all uppercase letters in this specification.
+<a href="#refsRFC2119">[RFC2119]</a>
+
+<p>Requirements phrased in the imperative as part of algorithms
+(such as "strip any leading space characters" or "return false and
+terminate these steps") are to be interpreted with the meaning of the
+key word ("must", "should", "may", etc) used in introducing the
+algorithm.
+
+<p>Conformance requirements phrased as algorithms or specific steps
+may be implemented in any manner, so long as the end result is
+equivalent. (In particular, the algorithms defined in this
+specification are intended to be easy to follow, and not intended to
+be performant.)
+
+<p id="hardwareLimitations">User agents may impose
+implementation-specific limits on otherwise unconstrained inputs,
+e.g. to prevent denial of service attacks, to guard against running
+out of memory, or to work around platform-specific limitations.
+
+<p>When a method or an attribute is said to call another method or attribute,
+the user agent must invoke its internal API for that attribute or method so
+that e.g. the author can't change the behavior by overriding attributes or
+methods with custom properties or functions in ECMAScript.
+
+<p>Unless otherwise stated, string comparisons are done in a
+<span>case-sensitive</span> manner.
+
+<h3 id="dependencies"><span class="secno">1.1 </span>Dependencies</h3>
+
+<p>The IDL fragments in this specification must be interpreted as
+required for conforming IDL fragments, as described in the Web IDL
+specification. <a href="#refsWEBIDL">[WEBIDL]</a>
+
+<p>Some of the terms used in this specification are defined in
+<cite>Web IDL</cite>.
+<a href="#refsWEBIDL">[WEBIDL]</a>
+
+
+
+<h2 id="terminology"><span class="secno">2 </span>Terminology</h2>
+
+<p>TODO
+
+
+
+<h2 class="no-num" id="references">References</h2>
+<div id="anolis-references"><dl><dt id="refsRFC2119">[RFC2119]
+<dd><cite><a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a></cite>, Scott Bradner. IETF.
+
+<dt id="refsWEBIDL">[WEBIDL]
+<dd><cite><a href="http://dev.w3.org/2006/webapi/WebIDL/">Web IDL</a></cite>, Cameron McCormack. W3C.
+
+</dl></div>
+
+
+
+<h2 class="no-num" id="acknowledgments">Acknowledgments</h2>
+
+<p>Thanks to
+
+???
+
+for their useful comments.
+
+<script class="dontpublish" id="head" src="http://www.whatwg.org/specs/web-apps/current-work/dfn.js"></script>
+<!-- vim: set expandtab shiftwidth=1 tabstop=1 textwidth=76 -->

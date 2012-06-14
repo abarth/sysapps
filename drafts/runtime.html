@@ -1,0 +1,368 @@
+<!DOCTYPE html><html lang="en-US"><head>
+  <meta charset="UTF-8">
+  <title>Runtime Model for System Application</title>
+  <!-- W3C only -->
+  <style>
+   pre.idl { border:solid thin; background:#eee; color:#000; padding:0.5em }
+   pre.idl :link, pre.idl :visited { color:inherit; background:transparent }
+   pre code { color:inherit; background:transparent }
+   .example { margin-left:1em; padding-left:1em; border-left:double; color:#222; background:#fcfcfc }
+   .note { margin-left:2em; font-weight:bold; font-style:italic; color:#008000 }
+   p.note::before { content:"Note: " }
+   .XXX { padding:.5em; border:solid #f00 }
+   p.XXX::before { content:"Issue: " }
+   dl.switch { padding-left:2em }
+   dl.switch > dt { text-indent:-1.5em }
+   dl.switch > dt:before { content:'\21AA'; padding:0 0.5em 0 0; display:inline-block; width:1em; text-align:right; line-height:0.5em }
+   dl.domintro { color: green; margin: 2em 0 2em 2em; padding: 0.5em 1em; border: none; background: #DDFFDD; }
+   dl.domintro dt, dl.domintro dt * { color: black; text-decoration: none; }
+   dl.domintro dd { margin: 0.5em 0 1em 2em; padding: 0; }
+   dl.domintro dd p { margin: 0.5em 0; }
+   dl.domintro:before { display: table; margin: -1em -0.5em -0.5em auto; width: auto; content: 'This box is non-normative. Implementation requirements are given below this box.'; color: red; border: solid 2px; background: white; padding: 0 0.25em; }
+   em.ct { text-transform:lowercase; font-variant:small-caps; font-style:normal }
+   dfn { font-weight:bold; font-style:normal }
+   code { color:orangered }
+   code :link, code :visited { color:inherit }
+   hr:not(.top) { display:block; background:none; border:none; padding:0; margin:2em 0; height:auto }
+   table { border-collapse:collapse; border-style:hidden hidden none hidden }
+   table thead { border-bottom:solid }
+   table tbody th:first-child { border-left:solid }
+   table td, table th { border-left:solid; border-right:solid; border-bottom:solid thin; vertical-align:top; padding:0.2em }
+
+   .warning { color: red; background: transparent; font-weight: bolder; font-style: italic; }
+   .warning p:first-child { margin-top: 0; }
+   .warning p:last-child { margin-bottom: 0; }
+   .warning:before { font-style: normal; }
+   p.warning:before { content: '\26A0 Warning! '; }
+  </style>
+  <style>
+   @media print {
+     [data-anolis-spec]::after { content:"[" attr(data-anolis-spec) "]"; font-size:.6em; vertical-align:super; text-transform:uppercase }
+   }
+  </style>
+  <link class="w3conly" href="http://www.w3.org/StyleSheets/TR/W3C-ED" rel="stylesheet" type="text/css">
+  </head>
+ <body>
+
+<div class="head">
+<div class="w3conly">
+
+<!--begin-logo-->
+<p><a href="http://www.w3.org/"><img alt="W3C" height="48" src="http://www.w3.org/Icons/w3c_home" width="72"></a></p>
+<!--end-logo-->
+</div>
+ <h1>Runtime Model for System Application</h1>
+ <h2 class="no-num no-toc" id="editor's-draft-14-june-2012">
+  <span class="w3conly">Editor's Draft 14 June 2012</span>
+  </h2>
+
+ <dl>
+  <dt>This Version:
+  <dd class="dontpublish w3conly"><a href="http://dvcs.w3.org/hg/????/raw-file/tip/runtime.html">http://dvcs.w3.org/hg/???/raw-file/tip/runtime.html</a>
+  <dt class="dontpublish">Participate:</dt>
+  <dd class="dontpublish">Send feedback to
+  <a href="mailto:public-sysapps@w3.org?subject=%5BSRuntime%5D%20">public-sysapps@w3.org</a> (<a href="http://lists.w3.org/Archives/Public/public-sysapps/">archives</a>)
+
+  <dt>Editors:
+  <dd>???
+ </dl>
+
+<div class="w3conly">
+<!--begin-copyright-->
+<p class="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> &copy; 2012 <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>&reg;</sup> (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="http://www.keio.ac.jp/">Keio</a>), All Rights Reserved. W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.</p>
+<!--end-copyright--></div>
+</div>
+
+
+
+<h2 class="no-num no-toc" id="table-of-contents">Table of Contents</h2>
+
+<!--begin-toc-->
+<ol class="toc">
+ <li><a href="#conformance"><span class="secno">1 </span>Conformance</a>
+  <ol class="toc">
+   <li><a href="#dependencies"><span class="secno">1.1 </span>Dependencies</a></ol></li>
+ <li><a href="#design-principles"><span class="secno">2 </span>Design Principles</a></li>
+ <li><a href="#application-lifecycle"><span class="secno">3 </span>Application Lifecycle</a>
+  <ol class="toc">
+   <li><a href="#installation"><span class="secno">3.1 </span>Installation</a></li>
+   <li><a href="#event-page"><span class="secno">3.2 </span>Event Page</a></li>
+   <li><a href="#launch"><span class="secno">3.3 </span>Launch</a></li>
+   <li><a href="#event-initiated-startup"><span class="secno">3.4 </span>Event-initiated startup</a></li>
+   <li><a href="#creating-windows"><span class="secno">3.5 </span>Creating Windows</a></li>
+   <li><a href="#termination"><span class="secno">3.6 </span>Termination</a></li>
+   <li><a href="#update"><span class="secno">3.7 </span>Update</a></li>
+   <li><a href="#uninstallation"><span class="secno">3.8 </span>Uninstallation</a></ol></li>
+ <li><a class="no-num" href="#references">References</a></li>
+ <li><a class="no-num" href="#acknowledgments">Acknowledgments</a></ol>
+<!--end-toc-->
+
+
+
+<h2 id="conformance"><span class="secno">1 </span>Conformance</h2>
+<p>All diagrams, examples, and notes in this specification are
+non-normative, as are all sections explicitly marked non-normative.
+Everything else in this specification is normative.
+
+<p>The key words "MUST", "MUST NOT", "REQUIRED", <!--"SHALL", "SHALL
+NOT",--> "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and
+"OPTIONAL" in the normative parts of this document are to be
+interpreted as described in RFC2119. For readability, these words do
+not appear in all uppercase letters in this specification.
+<a href="#refsRFC2119">[RFC2119]</a>
+
+<p>Requirements phrased in the imperative as part of algorithms
+(such as "strip any leading space characters" or "return false and
+terminate these steps") are to be interpreted with the meaning of the
+key word ("must", "should", "may", etc) used in introducing the
+algorithm.
+
+<p>Conformance requirements phrased as algorithms or specific steps
+may be implemented in any manner, so long as the end result is
+equivalent. (In particular, the algorithms defined in this
+specification are intended to be easy to follow, and not intended to
+be performant.)
+
+<p id="hardwareLimitations">User agents may impose
+implementation-specific limits on otherwise unconstrained inputs,
+e.g. to prevent denial of service attacks, to guard against running
+out of memory, or to work around platform-specific limitations.
+
+<p>When a method or an attribute is said to call another method or attribute,
+the user agent must invoke its internal API for that attribute or method so
+that e.g. the author can't change the behavior by overriding attributes or
+methods with custom properties or functions in ECMAScript.
+
+<p>Unless otherwise stated, string comparisons are done in a
+<span>case-sensitive</span> manner.
+
+<h3 id="dependencies"><span class="secno">1.1 </span>Dependencies</h3>
+
+<p>The IDL fragments in this specification must be interpreted as
+required for conforming IDL fragments, as described in the Web IDL
+specification. <a href="#refsWEBIDL">[WEBIDL]</a>
+
+<p>Some of the terms used in this specification are defined in
+<cite>Web IDL</cite>.
+<a href="#refsWEBIDL">[WEBIDL]</a>
+
+
+
+<h2 id="design-principles"><span class="secno">2 </span>Design Principles</h2>
+<p>The runtime has the following core design principles:
+<dl>
+  <dt>Installable
+  <dd>The user (or a trusted delegate) must make a trust decision to decide to
+    install a System Application before it can be used.
+  <dt>Uninstallable
+  <dd>It must not be possible to create persistent malware with System
+    Applications.
+  <dt>Offline first
+  <dd>System Applications should run offline and should display a reasonable
+    user interface without any explicit effort by the developer.  They should
+    be able to automatically recover from lost or intermittent connectivity.
+    They don't need to provide their full functionality when offline, but they
+    should not be obviously or irrecoverably broken.
+  <dt>Outside of the browser
+  <dd>The runtime launches System Applications outside of the browser and
+    should not provide traditional browser "chrome" such as
+    back/forward navigation buttons or a location bar.
+  <dt>Powerful
+  <dd>The runtime provides System Applications with APIs that are inherently
+    dangerous and have potential privacy and security ramifications.  The
+    runtime must provide a trust mechanism whereby either the user explicitly
+    chooses to trust a potentially dangerous application or a third party
+    vouches for the safety of the application.
+  <dt>Limited
+  <dd>The APIs provided by the runtime are segmented according to a number of
+    fine-grained permissions.  If an application has not been granted a
+    permission, the runtime must prevent the application from using the
+    associated APIs.  Developers should minimize the permission they request
+    for their applications.
+  <dt>Sandboxed
+  <dd>System applications must be isolated from other applications and the
+    underlying operating system except for via explicitly defined, narrow,
+    typed, mediated APIs.
+  <dt>Resistant
+  <dd>The runtime must be resistant to vulnerabilities that could lead to
+    remote security exploits.  For example, the runtime should make it
+    difficult for attackers to mount a cross-site scripting attack against
+    System Applications.
+  <dt>Ephemeral
+  <dd>A System Application must be prepared to be terminated at any moment
+    without notification.  The application should be able to restore itself to
+    its previous state quickly and easily.  The runtime must prevent a system
+    application from delaying, prompting or canceling the application's
+    termination.
+  <dt>Verifiable
+  <dd>A third party (such as a broker, store, or market) must be able to verify
+    the code of a System Application and all of the future updates that the
+    third party delivers to the user.  Unverified code may be permitted, but
+    such code must be sandboxed and must not receive privileges for dangerous
+    APIs.
+  <dt>Revokable
+  <dd>A third party (such as a broker, store, or market) must be able to revoke
+    and disable a System Application that the third party provided to the
+    users, even after the user has installed the application.
+</dl>
+
+
+
+<h2 id="application-lifecycle"><span class="secno">3 </span>Application Lifecycle</h2>
+
+<h3 id="installation"><span class="secno">3.1 </span>Installation</h3>
+
+<p>System Applications must define the complete set of permissions or
+capabilities that they require or might request at runtime.  This list is set
+at install time and must not be changed until the application is updated.
+Applications must be <dfn id="concept-install" title="concept-install">installed</dfn> before they can
+be run with these permissions.  This installation acts as a <dfn id="concept-trust-gesture" title="concept-trust-gesture">trust gesture</dfn> and may be initiated either by
+the user or by a trusted delegate (e.g. operating system, device maker, device
+distributor, or enterprise policy).  User-initiated installation should include
+a confirmation step to mitigate the risk that a vulnerability in the runtime
+might cause automatic installation.
+
+<p>This document does not impose requirements on what information, of any,
+should be presented as part of the installation experience.  It is up to the
+runtime vendor to determine how best to assess the trust level and risk level
+of an application and how or if to convey that information to the user.  In its
+simplest form, a confirmation might simply be an install button in some
+protected part of the runtime user interface.  A more typical install
+experience might present an "are you sure?" confirmation dialog that
+summarizes the permissions requested by the application.
+
+<h3 id="event-page"><span class="secno">3.2 </span>Event Page</h3>
+
+<p>During installation, the application must define an <dfn id="concept-event-page" title="concept-event-page">event page</dfn>.  The event page is a resource within
+the application similar to other resources but with a few important
+differences:
+<ol>
+  <li>When running the event page, the runtime must not display display the
+    event page to the user. Instead, the page runs in the background.
+  <li>The event page is a singleton: there must be exactly one event page per
+    application.
+  <li>The runtime may close the event page in certain circumstances.  When an
+    event page is not executing any script, has no pending callbacks, and no
+    open windows, the runtime should close the event page.  In addition, the
+    runtime may close the event page in order to reduce resource consumption.
+</ol>
+
+<h3 id="launch"><span class="secno">3.3 </span>Launch</h3>
+
+<p>When the user initiates application startup, the runtime <dfn id="concept-launches" title="concept-launches">launches</dfn> the application by running these steps:
+<ol>
+  <li>Instantiate the application's event page.
+  <li>Spin the event loop until the event page's <code>DOMContentLoaded</code>
+    event finishes firing. FIXME: Is this correct?
+  <li><a class="external" href="http://www.whatwg.org/specs/web-apps/current-work/multipage/webappapis.html#queue-a-task">Queue a task</a> to <a class="external" href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#concept-event-fire" title="concept-event-fire">Fire an event</a> named
+    <code>launch</code> at the event page's <code>window</code> object.
+</ol>
+
+<p>Notice that the runtime does not create any visible windows when launching
+an application.  The application can choose whether to display any visible
+windows when handling the <code>launch</code> event.
+
+<h3 id="event-initiated-startup"><span class="secno">3.4 </span>Event-initiated startup</h3>
+
+<p>The runtime may start the application for the purpose of delivering events
+from the system.  For example, a system-level service might ask an email
+application to send an email on its behalf.  To handle these causes, the
+runtime <dfn id="concept-background-launch" title="concept-background-launch">launches the application in the
+background</dfn> to handle an event <var>event</var> by running these steps:
+<ol>
+  <li>If the application's event page is not currently instantiated:
+    <ol>
+      <li>Instantiate the application's event page.
+      <li>Spin the event loop until the event page's
+        <code>DOMContentLoaded</code> event finishes firing. FIXME: Is this
+        correct?
+    </ol>
+  <li><a class="external" href="http://www.whatwg.org/specs/web-apps/current-work/multipage/webappapis.html#queue-a-task">Queue a task</a> to <a class="external" href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#concept-event-fire" title="concept-event-fire">Fire</a> <var>event</var>
+    at the event page's <code>window</code> object.
+</ol>
+
+<p>The runtime should not indicate that applications launched are running in
+the runtime's primary user interface.  For example, the application should not
+appear in the operating system's task switcher.  The runtime may indicate that
+applications launched in this way are running in secondary user interface
+elements, such as a task manager or battery profiler.
+
+<p>Applications launched in this way can run for extended periods of time
+without being visible, for example, if they receive events frequently.
+Typically, applications should handle these events quickly and consume a
+minimal amount of resources when running in the background.
+
+<h3 id="creating-windows"><span class="secno">3.5 </span>Creating Windows</h3>
+
+<p>An event page may create one or more windows.  By default, these windows are
+created with a script connection to the event page and are directly scriptable
+by the event page.  FIXME: Do we want to specify an interface for creating an
+managing windows in this document?
+
+<h3 id="termination"><span class="secno">3.6 </span>Termination</h3>
+
+<p>The application can <dfn id="concept-terminate" title="concept-terminate">terminate</dfn> in a number
+of situations:
+<ul>
+  <li>The application may terminate itself by calling <code>window.close()</code>.
+  <li>The runtime may terminate the application if the application is idle
+    (i.e., not executing script, has no pending callbacks, and no open windows).
+  <li>The runtime may terminate the application to reduce overall resource
+    consumption by the runtime.
+</ul>
+
+<p>When an application is terminated, the runtime must close all of the
+application's pages, including the event page and any visible pages. The
+runtime must not let the application show down or cancel termination, including
+prompting the user.  Applications should automatically save their state
+periodically to protect against data loss.
+
+<h3 id="update"><span class="secno">3.7 </span>Update</h3>
+
+<p>The runtime may update applications whenever the application's event page is
+not instantiated.  When launched, the runtime must use the latest installed
+version of the application.
+
+<p>When updating, an application may request a change in its set of
+permissions. The runtime may require a trust gesture from the user to approve
+these changes.
+
+<h3 id="uninstallation"><span class="secno">3.8 </span>Uninstallation</h3>
+
+<p>The runtime must let the user <dfn id="concept-uninstall" title="concept-uninstall">uninstall</dfn>
+applications. If the application is running when uninstalled, the runtime must
+terminate the application. After uninstallation, there should be no
+code executing or private data stored by the runtime.
+
+<p>Uninstallation can lead to data loss because the runtime terminates the
+application without warning and deletes the application's private data. The
+runtime should warn the user about these hazards before uninstalling the
+application.
+
+<p>The runtime must prevent applications from persisting itself or a derived
+application after being uninstalled.  This requirement helps protect the user
+from persistent malware.
+
+
+
+<h2 class="no-num" id="references">References</h2>
+<div id="anolis-references"><dl><dt id="refsRFC2119">[RFC2119]
+<dd><cite><a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a></cite>, Scott Bradner. IETF.
+
+<dt id="refsWEBIDL">[WEBIDL]
+<dd><cite><a href="http://dev.w3.org/2006/webapi/WebIDL/">Web IDL</a></cite>, Cameron McCormack. W3C.
+
+</dl></div>
+
+
+
+<h2 class="no-num" id="acknowledgments">Acknowledgments</h2>
+
+<p>Thanks to
+
+???
+
+for their useful comments.
+
+<script class="dontpublish" id="head" src="http://www.whatwg.org/specs/web-apps/current-work/dfn.js"></script>
+<!-- vim: set expandtab shiftwidth=1 tabstop=1 textwidth=76 -->
