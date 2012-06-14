@@ -93,6 +93,7 @@
    <li><a href="#termination"><span class="secno">3.6 </span>Termination</a></li>
    <li><a href="#update"><span class="secno">3.7 </span>Update</a></li>
    <li><a href="#uninstallation"><span class="secno">3.8 </span>Uninstallation</a></ol></li>
+ <li><a href="#conventions"><span class="secno">4 </span>Conventions</a></li>
  <li><a class="no-num" href="#references">References</a></li>
  <li><a class="no-num" href="#acknowledgments">Acknowledgments</a></ol>
 <!--end-toc-->
@@ -342,6 +343,50 @@ application.
 <p>The runtime must prevent applications from persisting itself or a derived
 application after being uninstalled.  This requirement helps protect the user
 from persistent malware.
+
+
+
+<h2 id="conventions"><span class="secno">4 </span>Conventions</h2>
+
+<p>Functions must not block the main thread of the application.  If the
+function can execute using cached in-memory or computed values, the function
+may return values syncronously or throw exceptions.
+
+<p>In other cases, functions must be asynchronous.  Asynchronous functions must
+have no return value, throw no exceptions, and the last argument of the
+function should be a callback.  The callback must be called exactly once when
+the function execution has completed, whether or not the function completes
+successfully or generates data.
+
+<p>Typically, callbacks will take an error object as their first argument.  If
+the function does not complete successfully, the error argument will be
+non-<code>null</code>.  Otherwise, the error argument will be
+<code>null</code>.
+
+<p>Each functions is associated with one or more privileges.  These privileges
+vary in grainularity, ranging from granting access to entire modules,
+interfaces, or functions.  In some cases, a privilege might grant permission to
+call a function with a subset of its possible arguments.
+
+<p>The runtime may grant these privileges either when the user installs the
+application or when the application requests access at runtime (or some
+combination thereof).
+
+<p>Interfaces should be visible and callable regardless of whether the
+application has the requisite permission.  If the application does not have
+permission to call a function, the runtime should generate a permission error
+(FIXME: Citation needed).  Applications should be prepared to handle these
+errors.
+
+<p>Regardless of the level of privilege, applications must be allowed to make
+irreversible changes to the underlying operating system.  For example, For
+example, applications must not be able write to arbitrary parts of the
+file system without a specific user action.
+
+<p>Applications must not be able to interfere with other applications.
+Interaction between apps must be mediated by either explicit communication
+channels or shared typed storage (such as a <code>MessageChannel</code> or a
+contacts API).
 
 
 
