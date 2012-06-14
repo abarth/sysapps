@@ -265,17 +265,18 @@ specification. <span data-anolis-ref>WEBIDL</span>
 <p>System Applications must define the complete set of permissions or
 capabilities that they require or might request at runtime.  This list is set
 at install time and must not be changed until the application is updated.
-Applications must be installed before they can be run with these permissions.
-This installation acts as a &quot;trust gesture&quot; and may be initiated
-either by the user or by a trusted delegate (e.g. operating system, device
-maker, device distributor, or enterprise policy).  User-initiated installation
-should include a confirmation step to mitigate the risk that a vulnerability in
-the runtime might cause automatic installation.
+Applications must be <dfn title=concept-install>installed</dfn> before they can
+be run with these permissions.  This installation acts as a <dfn
+title=concept-trust-gesture>trust gesture</dfn> and may be initiated either by
+the user or by a trusted delegate (e.g. operating system, device maker, device
+distributor, or enterprise policy).  User-initiated installation should include
+a confirmation step to mitigate the risk that a vulnerability in the runtime
+might cause automatic installation.
 
-<p>This document does not impose requires on what information, of any, should
-be presented as part of the installation experience.  It is up to the runtime
-vendor to determine how best to assess the trust level and risk level of an
-application and how or if to convey that information to the user.  In its
+<p>This document does not impose requirements on what information, of any,
+should be presented as part of the installation experience.  It is up to the
+runtime vendor to determine how best to assess the trust level and risk level
+of an application and how or if to convey that information to the user.  In its
 simplest form, a confirmation might simply be an install button in some
 protected part of the runtime user interface.  A more typical install
 experience might present an &quot;are you sure?&quot; confirmation dialog that
@@ -358,7 +359,7 @@ managing windows in this document?
 <p>The application can <dfn title=concept-terminate>terminate</dfn> in a number
 of situations:
 <ul>
-  <li>The application may terminate by calling <code>window.close()</code>.
+  <li>The application may terminate itself by calling <code>window.close()</code>.
   <li>The runtime may terminate the application if the application is idle
     (i.e., not executing script, has no pending callbacks, and no open windows).
   <li>The runtime may terminate the application to reduce overall resource
