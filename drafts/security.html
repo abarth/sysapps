@@ -89,7 +89,7 @@
    <li><a href="#isolated-storage"><span class="secno">3.2 </span>Isolated Storage</a></li>
    <li><a href="#content-security-policy"><span class="secno">3.3 </span>Content Security Policy</a></li>
    <li><a href="#sandboxed-pages"><span class="secno">3.4 </span>Sandboxed Pages</a></li>
-   <li><a href="#plug-ins-and-extensions"><span class="secno">3.5 </span>Plug-ins and Extensions</a></ol></li>
+   <li><a href="#plug-ins"><span class="secno">3.5 </span>Plug-ins</a></ol></li>
  <li><a href="#permission-model"><span class="secno">4 </span>Permission Model</a></li>
  <li><a class="no-num" href="#references">References</a></li>
  <li><a class="no-num" href="#acknowledgments">Acknowledgments</a></ol>
@@ -196,7 +196,9 @@ font-src 'self' data: blob: filesystem:;
 
 <p>If a resource has associated list of sandbox directives <var>directives</var>, the runtime must enforce the CSP policy <code>sandbox <var>directives</var></code> instead of the <a href="#concept-default-csp-policy" title="concept-default-csp-policy">default CSP policy</a>.
 
-<h3 id="plug-ins-and-extensions"><span class="secno">3.5 </span>Plug-ins and Extensions</h3>
+<h3 id="plug-ins"><span class="secno">3.5 </span>Plug-ins</h3>
+
+<p>The runtime must prevent system applications from instantiating unsandboxed plug-ins.  FIXME: What does "unsandboxed" mean?
 
 
 
