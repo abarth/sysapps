@@ -169,9 +169,11 @@ specification. <a href="#refsWEBIDL">[WEBIDL]</a>
 
 <p>The runtime must provide each system application with <a class="external" href="http://abarth.github.com/sysapps/drafts/runtime.html#concept-isolated-storage" title="concept-isolated-storage">isolated storage</a>.
 
+<p>FIXME: Explain the security and privacy benefits of isolated storage.
+
 <h3 id="content-security-policy"><span class="secno">3.3 </span>Content Security Policy</h3>
 
-<p>System applications use Content Security Policy <a href="#refsCSP">[CSP]</a> to help mitigate cross-site scripting.  The runtime must enforce the following CSP policy on resources contained in system applications:
+<p>System applications use Content Security Policy <a href="#refsCSP">[CSP]</a> to help mitigate cross-site scripting.  The runtime must enforce the following <dfn id="concept-default-csp-policy" title="concept-default-csp-policy">default CSP policy</dfn> on resources contained in system applications:
 
 <pre>default-src 'self';
 connect-src *; 
@@ -190,7 +192,9 @@ font-src 'self' data: blob: filesystem:;
 
 <h3 id="sandboxed-pages"><span class="secno">3.4 </span>Sandboxed Pages</h3>
 
-<p>
+<p>System applications may designate one or more resources as <def title="concept-sandboxed-pages">sandboxed pages</def> and associate a <a href="http://www.whatwg.org/specs/web-apps/current-work/#sandboxing-flag-set">sandboxing flag set</a>, expressed as a list of sandbox directives.   The application must not include the <code>allow-same-origin</code>, <code>allow-top-navigation</code>, or <code>allow-popups</code> directives.
+
+<p>If a resource has associated list of sandbox directives <var>directives</var>, the runtime must enforce the CSP policy <code>sandbox <var>directives</var></code> instead of the <a href="#concept-default-csp-policy" title="concept-default-csp-policy">default CSP policy</a>.
 
 <h3 id="plug-ins-and-extensions"><span class="secno">3.5 </span>Plug-ins and Extensions</h3>
 

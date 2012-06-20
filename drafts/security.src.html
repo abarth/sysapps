@@ -215,9 +215,11 @@ specification. <span data-anolis-ref>WEBIDL</span>
 
 <p>The runtime must provide each system application with <span data-anolis-spec=runtime title=concept-isolated-storage>isolated storage</span>.
 
+<p>FIXME: Explain the security and privacy benefits of isolated storage.
+
 <h3>Content Security Policy</h3>
 
-<p>System applications use Content Security Policy <span data-anolis-ref>CSP</span> to help mitigate cross-site scripting.  The runtime must enforce the following CSP policy on resources contained in system applications:
+<p>System applications use Content Security Policy <span data-anolis-ref>CSP</span> to help mitigate cross-site scripting.  The runtime must enforce the following <dfn title=concept-default-csp-policy>default CSP policy</dfn> on resources contained in system applications:
 
 <pre>
 default-src 'self';
@@ -237,9 +239,13 @@ font-src 'self' data: blob: filesystem:;
 
 <h3>Sandboxed Pages</h3>
 
-<p>
+<p>System applications may designate one or more resources as <def title=concept-sandboxed-pages>sandboxed pages</def> and associate a <a href=http://www.whatwg.org/specs/web-apps/current-work/#sandboxing-flag-set>sandboxing flag set</a>, expressed as a list of sandbox directives.   The application must not include the <code>allow-same-origin</code>, <code>allow-top-navigation</code>, or <code>allow-popups</code> directives.
 
-<h3>Plug-ins and Extensions</h3>
+<p>If a resource has associated list of sandbox directives <var>directives</var>, the runtime must enforce the CSP policy <code>sandbox <var>directives</var></code> instead of the <span title=concept-default-csp-policy>default CSP policy</span>.
+
+<h3>Plug-ins</h3>
+
+<p>The runtime must prevent system applications from instantiating unsandboxed plug-ins.  FIXME: What does "unsandboxed" mean?
 
 
 

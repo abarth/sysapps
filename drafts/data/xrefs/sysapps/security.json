@@ -1,3 +1,5 @@
 {
-  "definitions": {}
+  "definitions": {
+    "concept-default-csp-policy": "concept-default-csp-policy"
+  }
 }
