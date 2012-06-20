@@ -192,9 +192,34 @@ specification. <span data-anolis-ref>WEBIDL</span>
 
 
 
-<h2>Terminology</h2>
+<h2>Risks</h2>
 
-<p>TODO
+<p>System applications have more privileges than normal web applications, including access to powerful system-level interfaces.
+
+<dl>
+  <dt>Cross-site scripting
+  <dd>If a system application contains a cross-site scripting vulnerability, an attacker might be able to inject script into the application and abuse its privileges to access powerful system-level interfaces.
+</dl>
+
+
+
+<h2>Mitigations</h2>
+
+<h3>Content Security Policy</h3>
+
+
+<h3>Sandboxed Pages</h3>
+
+
+<h3>Isolated Storage</h3>
+
+
+<h3>Plug-ins and Extensions</h3>
+
+
+
+<h2>Permission Model</h2>
+
 
 
 
