@@ -205,13 +205,33 @@ specification. <span data-anolis-ref>WEBIDL</span>
 
 <h2>Mitigations</h2>
 
-<h3>Content Security Policy</h3>
+<p>This section describes a number of mitigations that address the threats described in the previous section.
 
+<h3>Origin</h3>
 
-<h3>Sandboxed Pages</h3>
-
+<p>The runtime must execute each system application in an origin distinct from all other system applications and web sites. For example, the runtime could assign each system application a <var>unique identifier</var> and use the origin <code>system-application://<var>unique identifier</var></code>.
 
 <h3>Isolated Storage</h3>
+
+
+
+<h3>Content Security Policy</h3>
+
+<p>System applications use Content Security Policy <span data-anolis-ref>CSP</span> to help mitigate cross-site scripting.  The runtime must enforce the following CSP policy on resources contained in system applications:
+
+<pre>
+   default-src 'self';
+   connect-src *; 
+   style-src 'self' data: blob: filesystem: 'unsafe-inline';
+   img-src 'self' data: blob: filesystem:;
+   media-src 'self' data: blob: filesystem:;
+   frame-src 'self' data: blob: filesystem:;
+   font-src 'self' data: blob: filesystem:;
+</pre>
+
+Implementations may add implementation-specific sources to the above policy as long as the user agent can verify the integrity of the resources retrieved from those sources.
+
+<h3>Sandboxed Pages</h3>
 
 
 <h3>Plug-ins and Extensions</h3>

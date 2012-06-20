@@ -52,8 +52,8 @@
 <!--end-logo-->
 </div>
  <h1>Security Model for System Application</h1>
- <h2 class="no-num no-toc" id="editor's-draft-14-june-2012">
-  <span class="w3conly">Editor's Draft 14 June 2012</span>
+ <h2 class="no-num no-toc" id="editor's-draft-20-june-2012">
+  <span class="w3conly">Editor's Draft 20 June 2012</span>
   </h2>
 
  <dl>
@@ -82,7 +82,15 @@
  <li><a href="#conformance"><span class="secno">1 </span>Conformance</a>
   <ol class="toc">
    <li><a href="#dependencies"><span class="secno">1.1 </span>Dependencies</a></ol></li>
- <li><a href="#terminology"><span class="secno">2 </span>Terminology</a></li>
+ <li><a href="#risks"><span class="secno">2 </span>Risks</a></li>
+ <li><a href="#mitigations"><span class="secno">3 </span>Mitigations</a>
+  <ol class="toc">
+   <li><a href="#origin"><span class="secno">3.1 </span>Origin</a></li>
+   <li><a href="#isolated-storage"><span class="secno">3.2 </span>Isolated Storage</a></li>
+   <li><a href="#content-security-policy"><span class="secno">3.3 </span>Content Security Policy</a></li>
+   <li><a href="#sandboxed-pages"><span class="secno">3.4 </span>Sandboxed Pages</a></li>
+   <li><a href="#plug-ins-and-extensions"><span class="secno">3.5 </span>Plug-ins and Extensions</a></ol></li>
+ <li><a href="#permission-model"><span class="secno">4 </span>Permission Model</a></li>
  <li><a class="no-num" href="#references">References</a></li>
  <li><a class="no-num" href="#acknowledgments">Acknowledgments</a></ol>
 <!--end-toc-->
@@ -138,14 +146,61 @@ specification. <a href="#refsWEBIDL">[WEBIDL]</a>
 
 
 
-<h2 id="terminology"><span class="secno">2 </span>Terminology</h2>
+<h2 id="risks"><span class="secno">2 </span>Risks</h2>
 
-<p>TODO
+<p>System applications have more privileges than normal web applications, including access to powerful system-level interfaces.
+
+<dl>
+  <dt>Cross-site scripting
+  <dd>If a system application contains a cross-site scripting vulnerability, an attacker might be able to inject script into the application and abuse its privileges to access powerful system-level interfaces.
+</dl>
+
+
+
+<h2 id="mitigations"><span class="secno">3 </span>Mitigations</h2>
+
+<p>This section describes a number of mitigations that address the threats described in the previous section.
+
+<h3 id="origin"><span class="secno">3.1 </span>Origin</h3>
+
+<p>The runtime must execute each system application in an origin distinct from all other system applications and web sites. For example, the runtime could assign each system application a <var>unique identifier</var> and use the origin <code>system-application://<var>unique identifier</var></code>.
+
+<h3 id="isolated-storage"><span class="secno">3.2 </span>Isolated Storage</h3>
+
+
+
+<h3 id="content-security-policy"><span class="secno">3.3 </span>Content Security Policy</h3>
+
+<p>System applications use Content Security Policy <a href="#refsCSP">[CSP]</a> to help mitigate cross-site scripting.  The runtime must enforce the following CSP policy on resources contained in system applications:
+
+<pre>   default-src 'self';
+   connect-src *; 
+   style-src 'self' data: blob: filesystem: 'unsafe-inline';
+   img-src 'self' data: blob: filesystem:;
+   media-src 'self' data: blob: filesystem:;
+   frame-src 'self' data: blob: filesystem:;
+   font-src 'self' data: blob: filesystem:;
+</pre>
+
+Implementations may add implementation-specific sources to the above policy as long as the user agent can verify the integrity of the resources retrieved from those sources.
+
+<h3 id="sandboxed-pages"><span class="secno">3.4 </span>Sandboxed Pages</h3>
+
+
+<h3 id="plug-ins-and-extensions"><span class="secno">3.5 </span>Plug-ins and Extensions</h3>
+
+
+
+<h2 id="permission-model"><span class="secno">4 </span>Permission Model</h2>
+
 
 
 
 <h2 class="no-num" id="references">References</h2>
-<div id="anolis-references"><dl><dt id="refsRFC2119">[RFC2119]
+<div id="anolis-references"><dl><dt id="refsCSP">[CSP]
+<dd><cite><a href="http://dvcs.w3.org/hg/content-security-policy/raw-file/tip/csp-specification.dev.html">Content Security Policy</a></cite>, Brandon Sterne and Adam Barth. W3C.
+
+<dt id="refsRFC2119">[RFC2119]
 <dd><cite><a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a></cite>, Scott Bradner. IETF.
 
 <dt id="refsWEBIDL">[WEBIDL]
