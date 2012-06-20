@@ -12,6 +12,7 @@
   "http": "network/http.json",
   "origin": "network/origin.json",
   "progress-events": "dom/progress-events.json",
+  "runtime": "sysapps/runtime.json",
   "typedarray": "dom/typedarray.json",
   "uri" : "network/uri.json",
   "url" : "network/url.json",

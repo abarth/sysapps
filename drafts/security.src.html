@@ -213,26 +213,31 @@ specification. <span data-anolis-ref>WEBIDL</span>
 
 <h3>Isolated Storage</h3>
 
-
+<p>The runtime must provide each system application with <span data-anolis-spec=runtime title=concept-isolated-storage>isolated storage</span>.
 
 <h3>Content Security Policy</h3>
 
 <p>System applications use Content Security Policy <span data-anolis-ref>CSP</span> to help mitigate cross-site scripting.  The runtime must enforce the following CSP policy on resources contained in system applications:
 
 <pre>
-   default-src 'self';
-   connect-src *; 
-   style-src 'self' data: blob: filesystem: 'unsafe-inline';
-   img-src 'self' data: blob: filesystem:;
-   media-src 'self' data: blob: filesystem:;
-   frame-src 'self' data: blob: filesystem:;
-   font-src 'self' data: blob: filesystem:;
+default-src 'self';
+connect-src *; 
+style-src 'self' data: blob: filesystem: 'unsafe-inline';
+img-src 'self' data: blob: filesystem:;
+media-src 'self' data: blob: filesystem:;
+frame-src 'self' data: blob: filesystem:;
+font-src 'self' data: blob: filesystem:;
 </pre>
 
-Implementations may add implementation-specific sources to the above policy as long as the user agent can verify the integrity of the resources retrieved from those sources.
+<p>Implementations may add implementation-specific sources to the above policy as long as the user agent can verify the integrity of the resources retrieved from those sources.
+
+<p>By omitting <code>'unsafe-inline'</code> and <code>'unsafe-eval'</code> from the <code>script-src</code> directive, the policy blocks inline scripts, which are a common source of cross-site scripting vulnerabilities. By omitting insecure sources, the policy prevents system applications from mixing insecure content with secure content.
+
+<p>FIXME: Explain connection with the "offline first" design principle and the <code>XMLHttpRequest</code>/<code>responseBlob</code> pattern.
 
 <h3>Sandboxed Pages</h3>
 
+<p>
 
 <h3>Plug-ins and Extensions</h3>
 
