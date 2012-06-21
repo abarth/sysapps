@@ -213,13 +213,13 @@ specification. <span data-anolis-ref>WEBIDL</span>
 
 <h3>Installation</h3>
 
-<p>By default, the runtime must not run applications that are not <span data-anolis-spec=runtime title=concept-install>installed</dfn>. Requiring a <span data-anolis-spec=runtime title=concept-trust-gesture>trust gesture</span> before running applications lets the user control which applications will receive privileges from the runtime.
+<p>By default, the runtime must not run applications that are not <span data-anolis-spec=runtime title=concept-install>installed</span>. Requiring a <span data-anolis-spec=runtime title=concept-trust-gesture>trust gesture</span> before running applications lets the user control which applications will receive privileges from the runtime.
 
 <p>The runtime vendor may <dfn title=concept-preinstall>preinstall</dfn> system applications that the vendor has verified are safe.
 
 <h3>Uninstallation</h3>
 
-<p>The runtime must let the user uninstall system applications that were installed by the user. The runtime should let the user uninstall system applications that were <span title=preinstall>preinstalled</span> unless unintalling such an application would render the device unusable.
+<p>The runtime must let the user uninstall system applications that were installed by the user. The runtime should let the user uninstall system applications that were <span title=concept-preinstall>preinstalled</span> unless unintalling such an application would render the device unusable.
 
 <p>The runtime must not grant a system application a privilege that could be used to circumvent the install process.
 

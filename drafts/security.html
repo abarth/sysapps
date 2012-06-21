@@ -169,13 +169,13 @@ specification. <a href="#refsWEBIDL">[WEBIDL]</a>
 
 <h3 id="installation"><span class="secno">3.1 </span>Installation</h3>
 
-<p>By default, the runtime must not run applications that are not <a class="external" href="http://abarth.github.com/sysapps/drafts/runtime.html#concept-install" title="concept-install">installed. Requiring a <span class="external" title="concept-trust-gesture">trust gesture</span> before running applications lets the user control which applications will receive privileges from the runtime.
+<p>By default, the runtime must not run applications that are not <a class="external" href="http://abarth.github.com/sysapps/drafts/runtime.html#concept-install" title="concept-install">installed</a>. Requiring a <a class="external" href="http://abarth.github.com/sysapps/drafts/runtime.html#concept-trust-gesture" title="concept-trust-gesture">trust gesture</a> before running applications lets the user control which applications will receive privileges from the runtime.
 
-</a><p>The runtime vendor may <dfn id="concept-preinstall" title="concept-preinstall">preinstall</dfn> system applications that the vendor has verified are safe.
+<p>The runtime vendor may <dfn id="concept-preinstall" title="concept-preinstall">preinstall</dfn> system applications that the vendor has verified are safe.
 
 <h3 id="uninstallation"><span class="secno">3.2 </span>Uninstallation</h3>
 
-<p>The runtime must let the user uninstall system applications that were installed by the user. The runtime should let the user uninstall system applications that were <span title="preinstall">preinstalled</span> unless unintalling such an application would render the device unusable.
+<p>The runtime must let the user uninstall system applications that were installed by the user. The runtime should let the user uninstall system applications that were <a href="#concept-preinstall" title="concept-preinstall">preinstalled</a> unless unintalling such an application would render the device unusable.
 
 <p>The runtime must not grant a system application a privilege that could be used to circumvent the install process.
 
