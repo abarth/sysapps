@@ -1,5 +1,7 @@
 {
   "definitions": {
-    "concept-default-csp-policy": "concept-default-csp-policy"
+    "concept-default-csp-policy": "concept-default-csp-policy",
+    "concept-permissions": "concept-permissions",
+    "concept-preinstall": "concept-preinstall"
   }
 }

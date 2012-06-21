@@ -199,6 +199,10 @@ specification. <span data-anolis-ref>WEBIDL</span>
 <dl>
   <dt>Cross-site scripting
   <dd>If a system application contains a cross-site scripting vulnerability, an attacker might be able to inject script into the application and abuse its privileges to access powerful system-level interfaces.
+  <dt>Honest-but-curious applications
+  <dd>Even well-meaning application developers can be tempted to misuse powerful interfaces. For example, an application developer might be tempted to misuse the user's contacts list or violate the user's privacy.
+  <dt>Malicious applications
+  <dd>Attackers might create malicious applications that attempt to harm the user.
 </dl>
 
 
@@ -206,6 +210,20 @@ specification. <span data-anolis-ref>WEBIDL</span>
 <h2>Mitigations</h2>
 
 <p>This section describes a number of mitigations that address the threats described in the previous section.
+
+<h3>Installation</h3>
+
+<p>By default, the runtime must not run applications that are not <span data-anolis-spec=runtime title=concept-install>installed</dfn>. Requiring a <span data-anolis-spec=runtime title=concept-trust-gesture>trust gesture</span> before running applications lets the user control which applications will receive privileges from the runtime.
+
+<p>The runtime vendor may <dfn title=concept-preinstall>preinstall</dfn> system applications that the vendor has verified are safe.
+
+<h3>Uninstallation</h3>
+
+<p>The runtime must let the user uninstall system applications that were installed by the user. The runtime should let the user uninstall system applications that were <span title=preinstall>preinstalled</span> unless unintalling such an application would render the device unusable.
+
+<p>The runtime must not grant a system application a privilege that could be used to circumvent the install process.
+
+<p>Preventing system applications from gaining privileges that could be used to circumvent the uninstall process helps prevent system applications from becoming persistent malware. If an application misbehaves, the user has the option to uninstall the application and prevent further harm.
 
 <h3>Isolated Storage</h3>
 
@@ -255,7 +273,8 @@ font-src 'self' data: blob: filesystem:;
 
 <h2>Permission Model</h2>
 
-<p>Interfaces for system application can be associated with 
+<p>Interfaces for system application can be associated with one or more <dfn title=concept-permissions>permissions</dfn>, which are strings. FIXME: Fill in a description of how the permissions model works.
+
 
 
 <h2 class=no-num>References</h2>

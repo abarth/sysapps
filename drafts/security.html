@@ -85,11 +85,13 @@
  <li><a href="#risks"><span class="secno">2 </span>Risks</a></li>
  <li><a href="#mitigations"><span class="secno">3 </span>Mitigations</a>
   <ol class="toc">
-   <li><a href="#isolated-storage"><span class="secno">3.1 </span>Isolated Storage</a></li>
-   <li><a href="#origin"><span class="secno">3.2 </span>Origin</a></li>
-   <li><a href="#content-security-policy"><span class="secno">3.3 </span>Content Security Policy</a></li>
-   <li><a href="#sandboxed-pages"><span class="secno">3.4 </span>Sandboxed Pages</a></li>
-   <li><a href="#plug-ins"><span class="secno">3.5 </span>Plug-ins</a></ol></li>
+   <li><a href="#installation"><span class="secno">3.1 </span>Installation</a></li>
+   <li><a href="#uninstallation"><span class="secno">3.2 </span>Uninstallation</a></li>
+   <li><a href="#isolated-storage"><span class="secno">3.3 </span>Isolated Storage</a></li>
+   <li><a href="#origin"><span class="secno">3.4 </span>Origin</a></li>
+   <li><a href="#content-security-policy"><span class="secno">3.5 </span>Content Security Policy</a></li>
+   <li><a href="#sandboxed-pages"><span class="secno">3.6 </span>Sandboxed Pages</a></li>
+   <li><a href="#plug-ins"><span class="secno">3.7 </span>Plug-ins</a></ol></li>
  <li><a href="#permission-model"><span class="secno">4 </span>Permission Model</a></li>
  <li><a class="no-num" href="#references">References</a></li>
  <li><a class="no-num" href="#acknowledgments">Acknowledgments</a></ol>
@@ -153,6 +155,10 @@ specification. <a href="#refsWEBIDL">[WEBIDL]</a>
 <dl>
   <dt>Cross-site scripting
   <dd>If a system application contains a cross-site scripting vulnerability, an attacker might be able to inject script into the application and abuse its privileges to access powerful system-level interfaces.
+  <dt>Honest-but-curious applications
+  <dd>Even well-meaning application developers can be tempted to misuse powerful interfaces. For example, an application developer might be tempted to misuse the user's contacts list or violate the user's privacy.
+  <dt>Malicious applications
+  <dd>Attackers might create malicious applications that attempt to harm the user.
 </dl>
 
 
@@ -161,13 +167,27 @@ specification. <a href="#refsWEBIDL">[WEBIDL]</a>
 
 <p>This section describes a number of mitigations that address the threats described in the previous section.
 
-<h3 id="isolated-storage"><span class="secno">3.1 </span>Isolated Storage</h3>
+<h3 id="installation"><span class="secno">3.1 </span>Installation</h3>
+
+<p>By default, the runtime must not run applications that are not <a class="external" href="http://abarth.github.com/sysapps/drafts/runtime.html#concept-install" title="concept-install">installed. Requiring a <span class="external" title="concept-trust-gesture">trust gesture</span> before running applications lets the user control which applications will receive privileges from the runtime.
+
+</a><p>The runtime vendor may <dfn id="concept-preinstall" title="concept-preinstall">preinstall</dfn> system applications that the vendor has verified are safe.
+
+<h3 id="uninstallation"><span class="secno">3.2 </span>Uninstallation</h3>
+
+<p>The runtime must let the user uninstall system applications that were installed by the user. The runtime should let the user uninstall system applications that were <span title="preinstall">preinstalled</span> unless unintalling such an application would render the device unusable.
+
+<p>The runtime must not grant a system application a privilege that could be used to circumvent the install process.
+
+<p>Preventing system applications from gaining privileges that could be used to circumvent the uninstall process helps prevent system applications from becoming persistent malware. If an application misbehaves, the user has the option to uninstall the application and prevent further harm.
+
+<h3 id="isolated-storage"><span class="secno">3.3 </span>Isolated Storage</h3>
 
 <p>The runtime must provide each system application with <a class="external" href="http://abarth.github.com/sysapps/drafts/runtime.html#concept-isolated-storage" title="concept-isolated-storage">isolated storage</a>.
 
 <p>FIXME: Explain the security and privacy benefits of isolated storage.
 
-<h3 id="origin"><span class="secno">3.2 </span>Origin</h3>
+<h3 id="origin"><span class="secno">3.4 </span>Origin</h3>
 
 <p>The runtime must execute each system application in an origin distinct from all other system applications and web sites. For example, the runtime could assign each system application a <var>unique identifier</var> and use the origin <code>system-application://<var>unique identifier</var></code>.
 
@@ -175,7 +195,7 @@ specification. <a href="#refsWEBIDL">[WEBIDL]</a>
 
 </data><p class="note">In a web application, granting an origin permission to issue same-origin <code>XMLHttpRequests</code> for every URL is very dangerous because those requests carry cookies and other credentials. This risk is largely mitigated in system applications because each system application runs with isolated storage. Even if a user has logged into their bank in their browser, the HTTP requests issued by system applications will not have the user's credentials and will not be associated with the user's banking session.
 
-<h3 id="content-security-policy"><span class="secno">3.3 </span>Content Security Policy</h3>
+<h3 id="content-security-policy"><span class="secno">3.5 </span>Content Security Policy</h3>
 
 <p>System applications use Content Security Policy <a href="#refsCSP">[CSP]</a> to help mitigate cross-site scripting.  The runtime must enforce the following <dfn id="concept-default-csp-policy" title="concept-default-csp-policy">default CSP policy</dfn> on resources contained in system applications:
 
@@ -194,13 +214,13 @@ font-src 'self' data: blob: filesystem:;
 
 <p>FIXME: Explain connection with the "offline first" design principle and the <code>XMLHttpRequest</code>/<code>responseBlob</code> pattern.
 
-<h3 id="sandboxed-pages"><span class="secno">3.4 </span>Sandboxed Pages</h3>
+<h3 id="sandboxed-pages"><span class="secno">3.6 </span>Sandboxed Pages</h3>
 
 <p>System applications may designate one or more resources as <def title="concept-sandboxed-pages">sandboxed pages</def> and associate a <a href="http://www.whatwg.org/specs/web-apps/current-work/#sandboxing-flag-set">sandboxing flag set</a>, expressed as a list of sandbox directives.   The application must not include the <code>allow-same-origin</code>, <code>allow-top-navigation</code>, or <code>allow-popups</code> directives.
 
 <p>If a resource has associated list of sandbox directives <var>directives</var>, the runtime must enforce the CSP policy <code>sandbox <var>directives</var></code> instead of the <a href="#concept-default-csp-policy" title="concept-default-csp-policy">default CSP policy</a>.
 
-<h3 id="plug-ins"><span class="secno">3.5 </span>Plug-ins</h3>
+<h3 id="plug-ins"><span class="secno">3.7 </span>Plug-ins</h3>
 
 <p>The runtime must prevent system applications from instantiating unsandboxed plug-ins.  FIXME: What does "unsandboxed" mean?
 
@@ -208,7 +228,8 @@ font-src 'self' data: blob: filesystem:;
 
 <h2 id="permission-model"><span class="secno">4 </span>Permission Model</h2>
 
-<p>Interfaces for system application can be associated with 
+<p>Interfaces for system application can be associated with one or more <dfn id="concept-permissions" title="concept-permissions">permissions</dfn>, which are strings. FIXME: Fill in a description of how the permissions model works.
+
 
 
 <h2 class="no-num" id="references">References</h2>
