@@ -207,15 +207,19 @@ specification. <span data-anolis-ref>WEBIDL</span>
 
 <p>This section describes a number of mitigations that address the threats described in the previous section.
 
-<h3>Origin</h3>
-
-<p>The runtime must execute each system application in an origin distinct from all other system applications and web sites. For example, the runtime could assign each system application a <var>unique identifier</var> and use the origin <code>system-application://<var>unique identifier</var></code>.
-
 <h3>Isolated Storage</h3>
 
 <p>The runtime must provide each system application with <span data-anolis-spec=runtime title=concept-isolated-storage>isolated storage</span>.
 
 <p>FIXME: Explain the security and privacy benefits of isolated storage.
+
+<h3>Origin</h3>
+
+<p>The runtime must execute each system application in an origin distinct from all other system applications and web sites. For example, the runtime could assign each system application a <var>unique identifier</var> and use the origin <code>system-application://<var>unique identifier</var></code>.
+
+<p>When runing the steps for <code>XMLHttpRequest</code>'s <span data-anolis-spec=xhr title=dom-xmlhttprequest-send><code>send()</code> method</span>, the runtime must act as if the <span data-anolis-spec=xhr>XMLHttpRequest origin</span> and the <span data-anolis-spec=xhr>request URL</span> are <data data-anolis-spec=html>same origin</span>.
+
+<p class=note>In a web application, granting an origin permission to issue same-origin <code>XMLHttpRequests</code> for every URL is very dangerous because those requests carry cookies and other credentials. This risk is largely mitigated in system applications because each system application runs with isolated storage. Even if a user has logged into their bank in their browser, the HTTP requests issued by system applications will not have the user's credentials and will not be associated with the user's banking session.
 
 <h3>Content Security Policy</h3>
 
@@ -251,7 +255,7 @@ font-src 'self' data: blob: filesystem:;
 
 <h2>Permission Model</h2>
 
-
+<p>Interfaces for system application can be associated with 
 
 
 <h2 class=no-num>References</h2>
