@@ -368,7 +368,7 @@ of situations:
 
 <p>When an application is terminated, the runtime must close all of the
 application's pages, including the event page and any visible pages. The
-runtime must not let the application show down or cancel termination, including
+runtime must not let the application slow down or cancel termination, including
 prompting the user.  Applications should automatically save their state
 periodically to protect against data loss.
 
@@ -421,7 +421,7 @@ the function does not complete successfully, the error argument will be
 non-<code>null</code>.  Otherwise, the error argument will be
 <code>null</code>.
 
-<p>Each functions is associated with one or more privileges.  These privileges
+<p>Each function is associated with one or more privileges.  These privileges
 vary in grainularity, ranging from granting access to entire modules,
 interfaces, or functions.  In some cases, a privilege might grant permission to
 call a function with a subset of its possible arguments.
@@ -436,8 +436,8 @@ permission to call a function, the runtime should generate a permission error
 (FIXME: Citation needed).  Applications should be prepared to handle these
 errors.
 
-<p>Regardless of the level of privilege, applications must be allowed to make
-irreversible changes to the underlying operating system.  For example, For
+<p>Regardless of the level of privilege, applications must not be allowed to
+make irreversible changes to the underlying operating system.  For
 example, applications must not be able write to arbitrary parts of the
 file system without a specific user action.
 
@@ -473,7 +473,7 @@ cookie, even if those requests are for <code>example.com</code>.
 
 <p>The runtime must allow applications to issue <code>XMLHttpRequests</code> to
 every <code>http</code> and <code>https</code> URI without using Cross-Origin
-Resource Sharing <span data-anolis-ref>CORS</span>.  In particular, cookie
+Resource Sharing <span data-anolis-ref>CORS</span>.  In particular, cookies
 should be enabled during these requests, but, due to isolated storage, the
 cookie jar for each host must be empty when the application is installed.
 
@@ -501,7 +501,7 @@ programmatic error handling.  For example, the runtime must prevent the
 application from loading remote scripts, workers, iframes, images, and style
 sheets.  FIXME: Nail down this list.
 
-<p>The runtime must allow the application to load remove audio and video
+<p>The runtime must allow the application to load remote audio and video
 resource.  FIXME: Is this requirement based on some rationale or should we just
 have a list of what is and is not allowed?
 
